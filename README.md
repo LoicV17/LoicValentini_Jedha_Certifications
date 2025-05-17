@@ -46,16 +46,7 @@ Elle atteste de la capacité à concevoir, déployer et superviser des architect
 
 ## 📁 Structure du dépôt
 
-.
-├── AIA_Architecte_Intelligence_Artificielle/
-│   ├── README.md
-│   └── ... (livrables & projets liés à la certification AIA)
-│
-├── CDSD_Concepteur_Developpeur_Sciences_Donnees/
-│   ├── README.md
-│   └── ... (livrables & projets liés à la certification CDSD)
-│
-└── README.md  ← (ce fichier principal)
+![image](https://github.com/user-attachments/assets/6203d4fc-4c33-430a-84b5-412714586d7e)
 
 
 ---
