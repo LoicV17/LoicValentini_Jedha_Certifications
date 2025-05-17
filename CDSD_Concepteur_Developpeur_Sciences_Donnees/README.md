@@ -73,7 +73,7 @@ CDSD_Concepteur_Developpeur_Sciences_Donnees/
 
 ## 📌 À propos
 
-👨‍🎓 Réalisé par **Loïc Valentini**  
+👨‍🎓 Réalisé par **Loic Valentini**  
 🔗 [LinkedIn](https://www.linkedin.com/in/loic-valentini-0a6238107/)  
 🏫 Formation : Data Science & Engineering Fullstack & Lead – Jedha Bootcamp  
 📅 Année : 2025
