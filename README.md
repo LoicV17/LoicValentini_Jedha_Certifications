@@ -48,12 +48,15 @@ Elle atteste de la capacité à concevoir, déployer et superviser des architect
 
 .
 ├── AIA_Architecte_Intelligence_Artificielle/
-│ ├── README.md
-│ └── ...
+│   ├── README.md
+│   └── ... (livrables & projets liés à la certification AIA)
+│
 ├── CDSD_Concepteur_Developpeur_Sciences_Donnees/
-│ ├── README.md
-│ └── ...
-└── README.md ← (ce fichier)
+│   ├── README.md
+│   └── ... (livrables & projets liés à la certification CDSD)
+│
+└── README.md  ← (ce fichier principal)
+
 
 ---
 
