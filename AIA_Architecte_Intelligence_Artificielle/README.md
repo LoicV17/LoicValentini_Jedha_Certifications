@@ -19,12 +19,7 @@ Chaque sous-dossier correspond à un bloc de compétences du référentiel RNCP 
 
 ## 📁 Structure du dépôt
 
-AIA_Architecte_Intelligence_Artificielle/
-├── Bloc_1_Gouvernance_Donnees/           # Politique de gouvernance, audit, conformité RGPD
-├── Bloc_2_Architecture_Donnees/          # Modélisation, base de données, cloud, monitoring
-├── Bloc_3_Pipeline_IA/                   # ETL/ELT, automatisation, orchestration (Airflow…)
-├── Bloc_4_Solution_IA_Production/        # MLOps, déploiement API, CI/CD, monitoring de modèles
-└── README.md                             # Ce fichier
+![image](https://github.com/user-attachments/assets/f872b8c0-ae66-4591-bdb4-6ee206bac8d5)
 
 
 ---
