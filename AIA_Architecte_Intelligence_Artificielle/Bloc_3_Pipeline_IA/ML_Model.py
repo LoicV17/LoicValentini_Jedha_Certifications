@@ -3,15 +3,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import mlflow
 import mlflow.sklearn
+from mlflow.models import infer_signature
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 
 import xgboost as xgb
-
-import os
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+import boto3
+import shutil
+import joblib
+
+# 🔐 Charger secrets
+env_path = Path(__file__).parent / "secrets" / ".env"
+load_dotenv(dotenv_path=env_path)
 
 # 📥 Charger les données
 url = "https://lead-program-assets.s3.eu-west-3.amazonaws.com/M05-Projects/fraudTest.csv"
@@ -68,11 +77,13 @@ grid_search = GridSearchCV(
     n_jobs=-1
 )
 
+# 🔗 MLflow config
+mlruns_uri = Path("mlruns").resolve().as_uri()
+mlflow.set_tracking_uri(mlruns_uri)
+print("✅ Tracking URI utilisé :", mlruns_uri)
+
+
 # 🚀 Lancer un run MLflow
-
-mlruns_path = Path("AIA_Architecte_Intelligence_Artificielle/Bloc_3_Pipeline_IA/mlruns").resolve().as_uri()
-mlflow.set_tracking_uri(mlruns_path)
-
 with mlflow.start_run(run_name="XGBoost_Fraud_GridSearch"):
 
     grid_search.fit(X_train, y_train)
@@ -108,4 +119,38 @@ with mlflow.start_run(run_name="XGBoost_Fraud_GridSearch"):
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Non fraude", "Fraude"])
     disp.plot(cmap=plt.cm.Blues)
     plt.title("Matrice de confusion - XGBoost (Test set)")
-    plt.show()
+
+    # 📸 Sauvegarde de la matrice de confusion
+    fig_path = "models/confusion_matrix.png"
+    plt.savefig(fig_path, bbox_inches="tight")
+    print(f"✅ Matrice de confusion sauvegardée dans '{fig_path}'")
+
+
+# Sauvegarde locale du modèle en tant que fichier .pkl
+local_model_path = "models/xgboost_fraud_model.pkl"
+joblib.dump(grid_search.best_estimator_, local_model_path)
+print(f"✅ Modèle sauvegardé localement sous {local_model_path}")
+
+# 📤 Upload vers S3 des dossiers `mlruns/` et `models/`
+
+s3_uri = os.getenv("MLFLOW_S3_BUCKET")
+bucket = s3_uri.replace("s3://", "").split("/")[0]
+prefix = "/".join(s3_uri.replace("s3://", "").split("/")[1:])
+
+s3 = boto3.client("s3")
+
+def upload_folder_to_s3(local_folder, s3_bucket, s3_prefix):
+    for root, _, files in os.walk(local_folder):
+        for file in files:
+            local_path = os.path.join(root, file)
+            relative_path = os.path.relpath(local_path, local_folder)
+            s3_path = os.path.join(s3_prefix, relative_path).replace("\\", "/")
+            s3.upload_file(local_path, s3_bucket, s3_path)
+            print(f"🟢 Uploadé : {local_path} -> s3://{s3_bucket}/{s3_path}")
+
+# 📁 Upload du dossier `models/`
+upload_folder_to_s3("models", bucket, f"{prefix}/models")
+
+# 📁 Upload du dossier `mlruns/`
+upload_folder_to_s3("mlruns", bucket, f"{prefix}/mlruns")
+
