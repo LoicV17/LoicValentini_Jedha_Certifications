@@ -1,4 +1,7 @@
-# Varaibles d'environnement qui contiennent des credentials
-
-**/.env
+# === ENV ===
 .env
+**/.env
+
+# === MLflow ===
+mlruns/
+**/mlruns/

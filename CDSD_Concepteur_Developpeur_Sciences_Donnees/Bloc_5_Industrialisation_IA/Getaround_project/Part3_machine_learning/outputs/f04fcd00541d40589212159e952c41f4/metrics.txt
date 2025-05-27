@@ -1,0 +1,4 @@
+Evaluation Metrics:
+R2 Score: 0.6893
+MAE: 12.52
+RMSE: 18.37

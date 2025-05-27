@@ -1,0 +1,12 @@
+Links where the public dashboard is available :
+
+- Streamlit app on streamlit.io
+https://appgetaround-6amwbwuwjmuns5pyhlhwhc.streamlit.app/
+
+- HuggingFace Space
+https://huggingface.co/spaces/LoicV17/dashboard-streamlit-getaround
+
+Presentation video :
+.Webm avaiblable in this folder (1'30'' - 5Mo)
+
+
