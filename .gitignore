@@ -5,3 +5,8 @@
 # === MLflow ===
 mlruns/
 **/mlruns/
+
+# DeepLearning Models (too heavy)
+model_1.h5
+model_2.h5
+model_3.h5
