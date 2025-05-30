@@ -1,5 +1,5 @@
 Link where the MLFLOW tracker is available :
 
 - HuggingFace Space
-https://huggingface.co/spaces/LoicV17/Mlflow-Getaround
+https://loicv17-mlflow-getaround.hf.space
 
