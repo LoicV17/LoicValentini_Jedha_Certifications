@@ -10,3 +10,7 @@ mlruns/
 model_1.h5
 model_2.h5
 model_3.h5
+
+# Pictures for project SkinCare(too heavy)
+src_pictures/
+**/src_pictues/
