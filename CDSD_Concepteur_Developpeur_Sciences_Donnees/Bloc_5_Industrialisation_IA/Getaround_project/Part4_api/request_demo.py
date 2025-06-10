@@ -25,6 +25,6 @@ response = requests.post(url, json=data)
 
 # Affichage du résultat
 if response.status_code == 200:
-    print("✅ Prédiciton :", response.json())
+    print("✅ Prediciton :", response.json())
 else:
     print("❌ Erreur :", response.status_code, response.text)
