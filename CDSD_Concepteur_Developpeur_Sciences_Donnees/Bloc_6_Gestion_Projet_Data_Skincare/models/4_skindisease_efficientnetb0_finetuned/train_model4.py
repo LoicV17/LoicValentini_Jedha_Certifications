@@ -84,7 +84,7 @@ model.compile(
 )
 
 # Callbacks
-checkpoint_path = os.path.join(MODEL_DIR, "efficientnetb0_finetuned_best_model.h5")
+checkpoint_path = os.path.join(MODEL_DIR, "model4_best_model.h5")
 callbacks = [
     ModelCheckpoint(checkpoint_path, save_best_only=True, monitor='val_accuracy', mode='max'),
     EarlyStopping(patience=4, restore_best_weights=True)
