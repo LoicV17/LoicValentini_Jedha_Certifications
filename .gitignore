@@ -14,3 +14,13 @@ model_3.h5
 # Pictures for project SkinCare(too heavy)
 src_pictures/
 **/src_pictues/
+
+# Skincare Models (too heavy)
+model1_best_model.h5
+model2_best_model.h5
+model3_best_model.h5
+model4_best_model.h5
+model5_best_model.h5
+model6_bestmodel.h5
+model7_bestmodel.h5
+model8_bestmodel.h5
