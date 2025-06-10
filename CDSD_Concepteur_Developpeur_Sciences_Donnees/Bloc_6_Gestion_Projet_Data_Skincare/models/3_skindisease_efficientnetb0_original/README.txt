@@ -35,6 +35,3 @@ Ce modèle utilise EfficientNetB0 (pré-entraîné sur ImageNet) pour classer le
 - `classification_report.txt` : rapport
 - `confusion_matrix.png` : matrice
 
-## 🔍 Conclusion
-
-Ce modèle offre un excellent compromis précision/temps. Il constitue une baseline robuste sans nécessité de fine-tuning. À recommander pour déploiement rapide ou comparaison avec des architectures plus lourdes.
