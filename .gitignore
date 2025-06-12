@@ -1,26 +1,11 @@
 # === ENV ===
 .env
-**/.env
 
 # === MLflow ===
 mlruns/
-**/mlruns/
 
-# DeepLearning Models (too heavy)
-model_1.h5
-model_2.h5
-model_3.h5
+# === Deep Learning Models (.h5) ===
+*.h5
 
-# Pictures for project SkinCare(too heavy)
+# === Project Data (too heavy for Git) ===
 src_pictures/
-**/src_pictues/
-
-# Skincare Models (too heavy)
-model1_best_model.h5
-model2_best_model.h5
-model3_best_model.h5
-model4_best_model.h5
-model5_best_model.h5
-model6_bestmodel.h5
-model7_bestmodel.h5
-model8_bestmodel.h5
