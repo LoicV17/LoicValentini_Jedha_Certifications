@@ -34,13 +34,13 @@ Normalisation : faite via preprocess_input() (EfficientNet)
 ✅ Résultats obtenus :
 Epoch avec la meilleure val_accuracy : epoch 16
 
-Accuracy (train) : 72.3%
+Accuracy (train) : 72.7%
 
-Loss (train) : 0.6680
+Loss (train) : 0.6851
 
-Accuracy (val) : 71.5%
+Accuracy (val) : 71.1%
 
-Loss (val) : 0.7810
+Loss (val) : 0.8213
 
 ✅ Modèle sauvegardé : model6_bestmodel.h5
 📈 Courbes sauvegardées : model6_accuracy.png et model6_loss.png
