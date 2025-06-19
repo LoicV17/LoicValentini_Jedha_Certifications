@@ -145,14 +145,14 @@ with col1:
     if camera_image is not None:
         # Convertir l'image de la webcam en format PIL
         image = Image.open(camera_image)
-        st.image(image, caption="Photo capturée via la webcam", use_column_width=True)
+        st.image(image, caption="Photo capturée via la webcam", use_container_width=True)
     elif uploaded_file is not None:
         image = Image.open(uploaded_file)
-        st.image(image, caption="Image importée", use_column_width=True)
+        st.image(image, caption="Image importée", use_container_width=True)
     elif selected_example != "-- Aucun --":
         image_path = os.path.join("examples", selected_example)
         image = Image.open(image_path)
-        st.image(image, caption=f"Exemple : {selected_example}", use_column_width=True)
+        st.image(image, caption=f"Exemple : {selected_example}", use_container_width=True)
 
     # Ajouter une barre horizontale ici
     st.markdown("<hr>", unsafe_allow_html=True)
