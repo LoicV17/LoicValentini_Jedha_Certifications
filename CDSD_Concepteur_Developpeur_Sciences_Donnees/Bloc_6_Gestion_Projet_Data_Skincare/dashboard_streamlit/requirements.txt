@@ -1,9 +1,0 @@
-streamlit
-tensorflow==2.14.0
-pandas
-numpy
-scikit-learn
-Pillow
-matplotlib
-plotly
-joblib

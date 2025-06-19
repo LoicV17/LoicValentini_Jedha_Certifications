@@ -4,8 +4,9 @@
 # === MLflow ===
 mlruns/
 
-# === Deep Learning Models (.h5) ===
+# === Deep Learning Models (.h5 / .keras) ===
 *.h5
+*.keras
 
 # === Project Data (too heavy for Git) ===
 src_pictures/
