@@ -1,6 +1,9 @@
 # === ENV ===
 .env
 
+# === ZIP ===
+.zip
+
 # === MLflow ===
 mlruns/
 
