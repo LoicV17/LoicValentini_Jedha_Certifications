@@ -13,3 +13,6 @@ mlruns/
 
 # === Project Data (too heavy for Git) ===
 src_pictures/
+
+# === Dossiers_zip ===
+Dossiers_zip/
