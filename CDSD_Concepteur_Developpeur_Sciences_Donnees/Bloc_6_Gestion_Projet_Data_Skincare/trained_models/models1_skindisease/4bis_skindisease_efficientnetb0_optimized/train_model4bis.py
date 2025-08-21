@@ -11,6 +11,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLRO
 from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
 
+
 # Argument parsing
 parser = argparse.ArgumentParser()
 parser.add_argument('--epochs', type=int, default=40)
@@ -19,14 +20,19 @@ parser.add_argument('--unfreeze_layers', type=int, default=20)
 args = parser.parse_args()
 
 # Paths
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 DATA_DIR = os.path.join(BASE_DIR, "src_pictures")
-MODEL_DIR = os.path.join(BASE_DIR, "models", "4bis_skindisease_efficientnetb0_optimized")
+MODEL_DIR = os.path.join(BASE_DIR, "trained_models", "models1_skindisease", "4bis_skindisease_efficientnetb0_optimized")
 os.makedirs(MODEL_DIR, exist_ok=True)
-
 train_dir = os.path.join(DATA_DIR, "train_skindisease")
 val_dir   = os.path.join(DATA_DIR, "val_skindisease")
 test_dir  = os.path.join(DATA_DIR, "test_skindisease")
+
+print("BASE_DIR =", BASE_DIR)
+print("DATA_DIR =", DATA_DIR)
+print("TRAIN_DIR =", train_dir)
+print("VAL_DIR =", val_dir)
+print("TEST_DIR =", test_dir)
 
 # Dataset settings
 IMG_SIZE = (240, 240)
@@ -75,7 +81,7 @@ model.compile(
 )
 
 # Callbacks
-checkpoint_path = os.path.join(MODEL_DIR, "model4_best_model_v2.h5")
+checkpoint_path = os.path.join(MODEL_DIR, "model4_best_model_v2.keras")
 callbacks = [
     ModelCheckpoint(checkpoint_path, save_best_only=True, monitor='val_accuracy', mode='max'),
     EarlyStopping(patience=10, restore_best_weights=True),
