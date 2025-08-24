@@ -81,7 +81,7 @@ model.compile(
 )
 
 # Callbacks
-checkpoint_path = os.path.join(MODEL_DIR, "model6_best_model6.keras")
+checkpoint_path = os.path.join(MODEL_DIR, "model6_best.h5")
 callbacks = [
     ModelCheckpoint(checkpoint_path, save_best_only=True, monitor='val_accuracy', mode='max'),
     EarlyStopping(patience=10, restore_best_weights=True),
