@@ -1,4 +1,10 @@
 import os
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
+# Configuration pour réduire les logs TensorFlow
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -19,7 +25,13 @@ from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_pr
 
 import joblib
 import plotly.graph_objects as go
-from GradCam import generate_gradcam  # suppose gradcam basé sur model2
+
+# Import conditionnel pour éviter l'erreur si le fichier n'existe pas
+try:
+    from GradCam import generate_gradcam
+except ImportError:
+    st.error("Le module GradCam n'a pas été trouvé. Assurez-vous que GradCam.py est présent.")
+    st.stop()
 
 # ============== Chargement des modèles ==============
 MODEL1_PATH = "model1_h5version.h5"     # EfficientNetB0 binaire (benin/malin)
@@ -28,14 +40,23 @@ MODEL3_PATH = "model3.joblib"    # pipeline tabulaire (stacked RF)
 
 @st.cache_resource(show_spinner=True)
 def load_model1():
+    if not os.path.exists(MODEL1_PATH):
+        st.error(f"Modèle 1 non trouvé : {MODEL1_PATH}")
+        st.stop()
     return tf.keras.models.load_model(MODEL1_PATH)
 
 @st.cache_resource(show_spinner=True)
 def load_model2():
+    if not os.path.exists(MODEL2_PATH):
+        st.error(f"Modèle 2 non trouvé : {MODEL2_PATH}")
+        st.stop()
     return tf.keras.models.load_model(MODEL2_PATH)
 
 @st.cache_resource(show_spinner=True)
 def load_model3():
+    if not os.path.exists(MODEL3_PATH):
+        st.error(f"Modèle 3 non trouvé : {MODEL3_PATH}")
+        st.stop()
     return joblib.load(MODEL3_PATH)
 
 model1 = load_model1()
@@ -135,7 +156,7 @@ def predict_image(pil_image, age, sex, localization, use_tabular=True):
         }
         input_df = pd.DataFrame([features])
         result_model3 = model3.predict(input_df)[0]
-        # normalisation d’affichage
+        # normalisation d'affichage
         if isinstance(result_model3, str):
             code = result_model3.strip().split()[0].split('-')[0]
             predicted_full_label = CODE_TO_FULL.get(code, result_model3)
@@ -271,7 +292,7 @@ with col2:
         palette = risk_palette.get(risk_color, risk_palette["orange"])
         icon = palette["icon"]
 
-        # Box unifiée : type de lésion + phrase de risque + note sur l’échelle
+        # Box unifiée : type de lésion + phrase de risque + note sur l'échelle
         st.markdown(
             f"""
             <div style='
@@ -289,14 +310,14 @@ with col2:
                     <strong>{icon} {risk_text}</strong> — {risk_message}
                 </div>
                 <div style='margin-top: 8px; font-size: 13px; color: #6b7280;'>
-                    ℹ️ L’échelle de risque comporte uniquement trois niveaux&nbsp;: <em>faible</em>, <em>modéré</em> et <em>élevé</em>.
+                    ℹ️ L'échelle de risque comporte uniquement trois niveaux&nbsp;: <em>faible</em>, <em>modéré</em> et <em>élevé</em>.
                 </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        # Si infos patient manquantes, on l’indique en dehors de la box
+        # Si infos patient manquantes, on l'indique en dehors de la box
         if result_model3 is None:
             st.info("Mode sans métadonnées : estimation basée sur l'image uniquement (modèle 2).")
 
@@ -350,7 +371,7 @@ with col2:
             })
         st.table(pd.DataFrame(top3_rows))
 
-        # Exemples d’images pour classes >10%
+        # Exemples d'images pour classes >10%
         st.markdown("#### 📸 Exemples des classes détectées (>10%)")
         high_proba = sorted(
             [(idx, p) for idx, p in enumerate(result_model2) if p > 0.10],
@@ -380,7 +401,7 @@ with col2:
         # ====== 6) Conseils ======
         st.subheader("💡 Conseils Skincare")
         st.write(
-            "💡 Ce modèle vous donne un aperçu du risque associé à l’image et propose une classification dermatologique automatisée.<br> "
+            "💡 Ce modèle vous donne un aperçu du risque associé à l'image et propose une classification dermatologique automatisée.<br> "
             "👨‍⚕️ Cette application ne remplace en aucun cas l'avis d'un professionnel de santé.<br>"
             "👩‍⚕️ Consultez un dermatologue en cas de doute ou de changement rapide.<br>"
             "🔆 Appliquez une crème solaire à large spectre tous les jours, même en hiver.<br>"
