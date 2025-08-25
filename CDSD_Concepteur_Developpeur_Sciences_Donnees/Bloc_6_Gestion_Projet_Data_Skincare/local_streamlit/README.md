@@ -79,25 +79,3 @@ pyarrow==15.0.2
 matplotlib==3.8.4
 
 
-## 🧑‍💻 Utilisation
-
-Charger une image : via webcam ou upload, ou choisir un exemple.
-
-Renseigner les métadonnées patient (facultatif) : âge, sexe, localisation.
-
-L’application affiche :
-
-la photo,
-
-le résultat général (type de lésion + niveau de risque),
-
-une jauge (probabilité malin du modèle binaire),
-
-un Top-3 multi-classe,
-
-la Grad-CAM (zones d’attention),
-
-des conseils.
-
-Si les métadonnées sont absentes, la classification s’appuie uniquement sur l’image (modèle 2).
-
