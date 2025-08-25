@@ -20,8 +20,9 @@ st.set_page_config(
 from PIL import Image
 
 # Preprocess spécifiques aux modèles
-from tensorflow.keras.applications.efficientnet import preprocess_input as efficientnet_preprocess
-from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess
+from keras.utils import load_img, img_to_array
+from keras.applications.resnet import ResNet50, preprocess_input as resnet_preprocess   # <-- 'resnet' (pas 'resnet50')
+from keras.applications.efficientnet import EfficientNetB0, preprocess_input as effnet_preprocess
 
 import joblib
 import plotly.graph_objects as go
@@ -101,7 +102,7 @@ def preprocess_image_for_model1_from_pil(pil_img, target_size=(240, 240)):
     arr = tf.image.resize(arr, target_size, method="bilinear")
     arr = tf.cast(arr, tf.float32).numpy()
     arr = np.expand_dims(arr, axis=0)
-    arr = efficientnet_preprocess(arr)
+    arr = effnet_preprocess(arr)
     return arr
 
 def preprocess_image_for_model2_from_pil(pil_img, target_size=(224, 224)):
