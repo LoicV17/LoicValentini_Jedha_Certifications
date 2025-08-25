@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 import streamlit as st
+import keras
 
 st.set_page_config(
     page_title="Skin Care - Analyse des grains de beauté",
