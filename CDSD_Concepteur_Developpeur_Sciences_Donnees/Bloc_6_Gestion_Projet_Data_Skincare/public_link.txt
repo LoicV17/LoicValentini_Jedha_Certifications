@@ -1,0 +1,3 @@
+Link where the public application is available :
+
+https://huggingface.co/spaces/LoicV17/Skincare-app-certification

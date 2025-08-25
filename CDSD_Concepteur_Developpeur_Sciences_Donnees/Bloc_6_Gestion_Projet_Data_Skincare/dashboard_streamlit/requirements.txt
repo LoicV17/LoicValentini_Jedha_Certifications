@@ -1,9 +1,0 @@
-streamlit
-tensorflow
-keras
-numpy
-matplotlib
-Pillow
-joblib
-scikit-learn==1.5.1
-plotly
