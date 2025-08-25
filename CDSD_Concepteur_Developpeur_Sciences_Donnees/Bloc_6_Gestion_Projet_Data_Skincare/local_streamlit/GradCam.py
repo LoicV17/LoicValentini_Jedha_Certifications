@@ -3,6 +3,8 @@ import numpy as np
 import tensorflow as tf
 from PIL import Image as PILImage
 import matplotlib.cm as cm
+from keras.models import Model
+
 
 def _find_last_conv_layer_name(model):
     for layer in reversed(model.layers):
@@ -44,10 +46,16 @@ def generate_gradcam(
 
     if last_conv_layer_name is not None:
         # ----- Grad-CAM classique -----
-        grad_model = tf.keras.models.Model(
-            [model.inputs],
-            [model.get_layer(last_conv_layer_name).output, model.output]
+        conv_layer = model.get_layer(last_conv_layer_name)
+
+        # Choisit la bonne forme d'inputs sans variable intermédiaire non définie
+        in_tensors = model.inputs if isinstance(model.inputs, (list, tuple)) else model.input
+
+        grad_model = Model(
+            inputs=in_tensors,
+            outputs=[conv_layer.output, model.output],
         )
+
         with tf.GradientTape() as tape:
             conv_out, preds = grad_model(x)
             if class_index is None:
