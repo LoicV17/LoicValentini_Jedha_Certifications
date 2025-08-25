@@ -22,7 +22,7 @@ import plotly.graph_objects as go
 from GradCam import generate_gradcam  # suppose gradcam basé sur model2
 
 # ============== Chargement des modèles ==============
-MODEL1_PATH = "model1.keras"     # EfficientNetB0 binaire (benin/malin)
+MODEL1_PATH = "model1_h5version.h5"     # EfficientNetB0 binaire (benin/malin)
 MODEL2_PATH = "model2.h5"        # ResNet/Xception multiclasses (7 classes)
 MODEL3_PATH = "model3.joblib"    # pipeline tabulaire (stacked RF)
 
@@ -371,7 +371,7 @@ with col2:
         st.markdown("---")
 
         # ====== 5) Grad-CAM ======
-        st.subheader("🧠 Grad-CAM — Zones d'attention du modèle")
+        st.subheader("🧠 Grad-CAM — Zones d'attention du modèle sur votre photo")
         centered_col = st.columns([1, 2, 1])[1]
         with centered_col:
             st.image(gradcam_image, width=300)
