@@ -7,6 +7,9 @@
 # === MLflow ===
 mlruns/
 
+# === secrets ===
+secrets.sh
+
 # === Deep Learning Models (.h5 / .keras) ===
 *.h5
 *.keras
