@@ -3,6 +3,9 @@
 
 # === ZIP ===
 .zip
+*.zip
+CDSD_Concepteur_Developpeur_Sciences_Donnees/Dossiers_zips/
+Dossiers_zip/
 
 # === MLflow ===
 mlruns/
@@ -17,8 +20,3 @@ secrets.sh
 # === Project Data (too heavy for Git) ===
 src_pictures/
 
-# === Dossiers_zip ===
-Dossiers_zip/
-# archives lourdes
-*.zip
-CDSD_Concepteur_Developpeur_Sciences_Donnees/Dossiers_zips/
