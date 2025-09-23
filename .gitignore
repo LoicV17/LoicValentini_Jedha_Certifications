@@ -22,3 +22,6 @@ secrets.sh
 # === Project Data (too heavy for Git) ===
 src_pictures/
 
+# === Fraud project src ===
+fraud_initial_src.csv
+
