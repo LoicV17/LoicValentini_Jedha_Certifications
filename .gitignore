@@ -1,5 +1,7 @@
 # === ENV ===
 .env
+secrets/.env
+**/.env
 
 # === ZIP ===
 .zip

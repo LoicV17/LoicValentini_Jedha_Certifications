@@ -1,7 +1,0 @@
-# Secrets
-.env
-secrets/.env
-**/.env
-
-# MLflow runs & artefacts
-mlruns/
