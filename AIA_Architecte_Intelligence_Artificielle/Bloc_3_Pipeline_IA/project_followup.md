@@ -62,7 +62,7 @@ Mettre en production un système de **détection automatique de fraudes bancaire
 
 ➡️ Automatiser l’ensemble du pipeline ETL + scoring + reporting.
 
-Créer 2 DAGs minimum :
+Créer 2 DAGs :
 
 #### 🌀 `fetch_and_score` (fréquence : toutes les minutes)
 
@@ -78,7 +78,7 @@ Créer 2 DAGs minimum :
 
 - Piloter les scripts Python (`BashOperator`, `PythonOperator`)
 - Ajouter des logs, gestion d’erreurs
-- Être containerisé (**Docker** recommandé)
+- Être containerisé (**Docker**)
 
 ---
 
