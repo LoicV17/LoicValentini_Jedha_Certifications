@@ -1,0 +1,205 @@
+# fetch_payments.py
+import os
+import time
+import json
+import requests
+import pandas as pd
+import numpy as np
+from datetime import datetime
+from sqlalchemy import create_engine, text
+from dotenv import load_dotenv
+from pathlib import Path
+
+# ===========================
+# 🔐 Charger secrets
+# ===========================
+env_path = Path(__file__).parent / "secrets" / ".env"
+load_dotenv(dotenv_path=env_path)
+
+DB_URL = os.getenv("NEONDB_URL")
+PAYMENTS_API_URL = os.getenv("PAYMENTS_API_URL")
+SCORING_API_URL = os.getenv("SCORING_API_URL")
+
+if not DB_URL or not PAYMENTS_API_URL or not SCORING_API_URL:
+    raise ValueError("❌ Variables d'environnement manquantes dans .env")
+
+# ===========================
+# ⚙️ Connexion DB
+# ===========================
+engine = create_engine(DB_URL)
+
+with engine.begin() as conn:
+    # Table brute
+    conn.execute(text("""
+    CREATE TABLE IF NOT EXISTS raw_payments (
+        id SERIAL PRIMARY KEY,
+        cc_num BIGINT,
+        merchant TEXT,
+        category TEXT,
+        amt FLOAT,
+        first TEXT,
+        last TEXT,
+        gender TEXT,
+        street TEXT,
+        city TEXT,
+        state TEXT,
+        zip INT,
+        lat FLOAT,
+        long FLOAT,
+        city_pop INT,
+        job TEXT,
+        dob TEXT,
+        trans_num TEXT,
+        merch_lat FLOAT,
+        merch_long FLOAT,
+        is_fraud INT,
+        event_time BIGINT
+    )
+    """))
+
+    # Table scorée
+    conn.execute(text("""
+    CREATE TABLE IF NOT EXISTS scored_payments (
+        id SERIAL PRIMARY KEY,
+        unnamed_0 BIGINT,
+        category TEXT,
+        amt FLOAT,
+        gender TEXT,
+        state TEXT,
+        zip INT,
+        city_pop INT,
+        distance FLOAT,
+        trans_year INT,
+        trans_month INT,
+        trans_day INT,
+        trans_hour INT,
+        trans_minute INT,
+        trans_dayofweek INT,
+        trans_week INT,
+        trans_is_weekend INT,
+        prediction INT,
+        probability FLOAT
+    )
+    """))
+
+print("✅ Tables 'raw_payments' et 'scored_payments' prêtes.")
+
+# ===========================
+# 🧹 Preprocess transaction
+# ===========================
+def preprocess_transaction(tx: dict) -> dict:
+    """Nettoyer et transformer la transaction brute du provider"""
+    try:
+        ts = int(tx.get("current_time", time.time()))
+        dt = datetime.utcfromtimestamp(ts / 1000)
+
+        distance = np.sqrt(
+            (tx.get("lat", 0) - tx.get("merch_lat", 0)) ** 2 +
+            (tx.get("long", 0) - tx.get("merch_long", 0)) ** 2
+        )
+
+        return {
+            "Unnamed_0": int(str(tx.get("cc_num", 0))[-9:]),
+            "category": tx.get("category"),
+            "amt": float(tx.get("amt", 0)),
+            "gender": tx.get("gender", "M"),  # garder string "M"/"F"
+            "state": tx.get("state"),
+            "zip": int(tx.get("zip", 0)),
+            "city_pop": int(tx.get("city_pop", 0)),
+            "distance": float(distance),
+            "trans_year": dt.year,
+            "trans_month": dt.month,
+            "trans_day": dt.day,
+            "trans_hour": dt.hour,
+            "trans_minute": dt.minute,
+            "trans_dayofweek": dt.weekday(),
+            "trans_week": dt.isocalendar()[1],
+            "trans_is_weekend": 1 if dt.weekday() >= 5 else 0
+        }
+
+    except Exception as e:
+        print("❌ Erreur preprocess:", e)
+        return None
+
+# ===========================
+# 🔄 Boucle ingestion
+# ===========================
+while True:
+    try:
+        resp = requests.get(PAYMENTS_API_URL, timeout=10)
+        resp.raise_for_status()
+
+        # Première couche: Hugging Face te renvoie une string JSON
+        outer_json = resp.json()        # c'est une string
+        print("🔎 outer_json type:", type(outer_json))
+
+        # Deuxième couche: on re-décodage pour avoir un dict
+        raw_json = json.loads(outer_json)
+        print("✅ raw_json dict keys:", list(raw_json.keys()))
+
+        # Parsing format "split"
+        df = pd.DataFrame(data=raw_json["data"], columns=raw_json["columns"])
+        raw_tx = df.iloc[0].to_dict()
+        print("✨ Transaction convertie en dict:", raw_tx)
+
+
+
+        # ✅ Stockage dans table brute
+        with engine.begin() as conn:
+            conn.execute(text("""
+                INSERT INTO raw_payments (
+                    cc_num, merchant, category, amt, first, last, gender, street, city,
+                    state, zip, lat, long, city_pop, job, dob, trans_num,
+                    merch_lat, merch_long, is_fraud, event_time
+                ) VALUES (
+                    :cc_num, :merchant, :category, :amt, :first, :last, :gender, :street, :city,
+                    :state, :zip, :lat, :long, :city_pop, :job, :dob, :trans_num,
+                    :merch_lat, :merch_long, :is_fraud, :current_time
+                )
+            """), raw_tx)
+
+
+        # Preprocess
+        clean_tx = preprocess_transaction(raw_tx)
+        if not clean_tx:
+            time.sleep(10)
+            continue
+        print("✨ Transaction transformée:", clean_tx)
+
+        # Scoring API
+        scoring_resp = requests.post(SCORING_API_URL, json=clean_tx, timeout=10)
+        scoring_resp.raise_for_status()
+        scoring = scoring_resp.json()
+        print("🤖 Résultat modèle:", scoring)
+
+        clean_tx["prediction"] = scoring.get("prediction", 0)
+        clean_tx["probability"] = scoring.get("probability_fraud", 0.0)
+
+        to_insert = clean_tx.copy()
+        to_insert["unnamed_0"] = to_insert.pop("Unnamed_0")  # ✅ alias pour la DB
+        to_insert["prediction"] = scoring.get("prediction", 0)
+        to_insert["probability"] = scoring.get("probability_fraud", 0.0)
+
+        with engine.begin() as conn:
+            conn.execute(text("""
+                INSERT INTO scored_payments (
+                    unnamed_0, category, amt, gender, state, zip, city_pop, distance,
+                    trans_year, trans_month, trans_day, trans_hour, trans_minute,
+                    trans_dayofweek, trans_week, trans_is_weekend,
+                    prediction, probability
+                )
+                VALUES (
+                    :unnamed_0, :category, :amt, :gender, :state, :zip, :city_pop, :distance,
+                    :trans_year, :trans_month, :trans_day, :trans_hour, :trans_minute,
+                    :trans_dayofweek, :trans_week, :trans_is_weekend,
+                    :prediction, :probability
+                )
+            """), to_insert)
+
+
+        print("✅ Transaction brute + scorée insérées avec succès !")
+
+    except Exception as e:
+        print("❌ Erreur ingestion:", e)
+
+    time.sleep(60)  # ⏳ 1/min

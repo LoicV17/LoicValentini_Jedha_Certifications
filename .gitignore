@@ -25,3 +25,7 @@ src_pictures/
 # === Fraud project src ===
 fraud_initial_src.csv
 
+# Ignorer les logs Airflow
+AIA_Architecte_Intelligence_Artificielle/Bloc_3_Pipeline_IA/airflow/logs/
+
+

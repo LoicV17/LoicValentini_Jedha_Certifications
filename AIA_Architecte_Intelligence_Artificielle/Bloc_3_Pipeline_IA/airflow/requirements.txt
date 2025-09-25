@@ -1,0 +1,7 @@
+apache-airflow==2.7.3
+psycopg2-binary
+sqlalchemy
+requests
+pandas
+python-dotenv
+boto3

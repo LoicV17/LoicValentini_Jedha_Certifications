@@ -55,7 +55,6 @@ Mettre en production un système de **détection automatique de fraudes bancaire
   -> Table `raw_payments` → transactions brutes ✅ 
   -> Table `scored_payments` → transactions enrichies de la prédiction ✅ 
 
-
 ---
 
 ### 🔵 4. Orchestration avec Airflow
@@ -71,8 +70,8 @@ Créer 2 DAGs :
 #### 📆 `daily_report` (fréquence : chaque matin 7h)
 
 - Requêtage des données de la veille
-- Génération d’un rapport CSV ou HTML
-- Envoi par email ou stockage dans S3
+- Génération d’un rapport CSV
+- Envoi par email et stockage dans S3 du CSV
 
 ✅ Airflow devra :
 
@@ -82,7 +81,7 @@ Créer 2 DAGs :
 
 ---
 
-### 🔵 6. Reporting & Visualisation
+### 🔵 5. Reporting & Visualisation
 
 ➡️ Rendre les résultats compréhensibles pour les utilisateurs.
 
