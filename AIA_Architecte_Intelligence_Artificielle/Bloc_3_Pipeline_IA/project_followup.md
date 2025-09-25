@@ -42,33 +42,23 @@ Mettre en production un système de **détection automatique de fraudes bancaire
 
 ---
 
-### 🟠 3. Ingestion Temps Réel des Transactions
+### 🟠 3. Ingestion Temps Réel des Transactions et Stockage des données ✅ 
 
 ➡️ Récupérer en continu les données de paiement depuis l’API externe.
-
-- Créer un script `fetch_payments.py` qui :
-  -> Appelle l’**API des paiements** toutes les minutes
-  -> Stocke les transactions dans **NeonDB** (PostgreSQL cloud)
-  -> Applique `model.predict()` pour enrichir chaque ligne
-
-⚙️ Automatisation possible via :
-
-- ✅ **Airflow** (orchestrateur recommandé)
-
-
----
-
-### 🟡 4. Stockage des Données
-
 ➡️ Organiser les données de manière durable pour les analyses futures.
 
-- [ ] Créer 2 tables PostgreSQL :
-  - `raw_payments` → transactions brutes
-  - `scored_payments` → transactions enrichies de la prédiction
+- Créer un script `fetch_payments.py` qui : ✅ 
+  -> Appelle l’**API des paiements** toutes les minutes ✅ 
+  -> Stocke les transactions dans **NeonDB** (PostgreSQL cloud) ✅ 
+  -> Applique `model.predict()` pour enrichir chaque ligne ✅ 
+
+  -> Table `raw_payments` → transactions brutes ✅ 
+  -> Table `scored_payments` → transactions enrichies de la prédiction ✅ 
+
 
 ---
 
-### 🔵 5. Orchestration avec Airflow
+### 🔵 4. Orchestration avec Airflow
 
 ➡️ Automatiser l’ensemble du pipeline ETL + scoring + reporting.
 
