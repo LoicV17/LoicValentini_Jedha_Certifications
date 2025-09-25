@@ -1,0 +1,33 @@
+##############################
+# Core ML / Data
+##############################
+numpy
+pandas
+scikit-learn
+xgboost
+matplotlib
+joblib
+tqdm
+
+##############################
+# Experiment tracking / S3
+##############################
+mlflow
+boto3
+botocore
+python-dotenv
+
+##############################
+# API (local + Hugging Face)
+##############################
+fastapi
+uvicorn[standard]
+pydantic
+
+
+##############################
+# Ingestion temps réel / DB
+##############################
+requests
+SQLAlchemy
+psycopg2-binary

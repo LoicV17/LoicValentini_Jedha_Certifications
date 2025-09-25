@@ -1,0 +1,18 @@
+{
+  "Unnamed_0": 189523,
+  "category": "grocery_pos",
+  "amt": 305.28,
+  "gender": "M",
+  "state": "OR",
+  "zip": 97132,
+  "city_pop": 28278,
+  "distance": 0.16945418035858312,
+  "trans_year": 2020,
+  "trans_month": 8,
+  "trans_day": 26,
+  "trans_hour": 11,
+  "trans_minute": 48,
+  "trans_dayofweek": 2,
+  "trans_week": 35,
+  "trans_is_weekend": 0
+}

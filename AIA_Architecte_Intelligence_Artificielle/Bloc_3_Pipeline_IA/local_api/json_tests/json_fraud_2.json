@@ -1,0 +1,18 @@
+{
+  "Unnamed_0": 372370,
+  "category": "grocery_pos",
+  "amt": 298.86,
+  "gender": "M",
+  "state": "IL",
+  "zip": 62571,
+  "city_pop": 1532,
+  "distance": 0.9559984901159593,
+  "trans_year": 2020,
+  "trans_month": 11,
+  "trans_day": 13,
+  "trans_hour": 8,
+  "trans_minute": 31,
+  "trans_dayofweek": 4,
+  "trans_week": 46,
+  "trans_is_weekend": 0
+}
