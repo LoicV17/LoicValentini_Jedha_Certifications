@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import mlflow
 import mlflow.sklearn
-from sklearn.model_selection import train_test_split, RandomizedSearchCV, ParameterSampler
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import (
     classification_report,
@@ -20,14 +20,14 @@ import joblib
 from pathlib import Path
 import numpy as np
 from tqdm import tqdm
-
+import boto3
+from botocore.exceptions import NoCredentialsError, ClientError
 
 from dotenv import load_dotenv
-from pathlib import Path
 import os
 
 # ========================================
-# 🔐 1bis. Charger secrets (connexion AWS)
+# 🔐 2. Charger secrets (connexion AWS)
 # ========================================
 env_path = Path(__file__).parent / "secrets" / ".env"
 load_dotenv(dotenv_path=env_path)
@@ -36,9 +36,45 @@ s3_uri = os.getenv("MLFLOW_S3_BUCKET")
 print(f"✅ Bucket MLflow configuré : {s3_uri}")
 
 # ========================================
-# 📥 2. Charger le dataset
+# 🔍 3. Vérifier connexion AWS / S3
 # ========================================
-file_path = "src/machine_learning_src.csv"
+try:
+    aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
+    aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+    aws_region = os.getenv("AWS_DEFAULT_REGION", "eu-west-3")
+
+    if not s3_uri:
+        raise ValueError("❌ Variable d'environnement MLFLOW_S3_BUCKET manquante")
+
+    # Normaliser bucket_name
+    if s3_uri.startswith("s3://"):
+        bucket_name = s3_uri.replace("s3://", "")
+    else:
+        bucket_name = s3_uri
+
+    # Connexion boto3
+    s3_client = boto3.client(
+        "s3",
+        aws_access_key_id=aws_access_key,
+        aws_secret_access_key=aws_secret_key,
+        region_name=aws_region
+    )
+
+    # Vérifier accès au bucket
+    s3_client.head_bucket(Bucket=bucket_name)
+    print(f"✅ Connexion réussie à S3 et accès au bucket '{bucket_name}'")
+
+except NoCredentialsError:
+    print("❌ Impossible de trouver les credentials AWS")
+except ClientError as e:
+    print(f"❌ Erreur de connexion au bucket : {e}")
+except Exception as e:
+    print(f"❌ Problème AWS : {e}")
+
+# ========================================
+# 📥 4. Charger le dataset
+# ========================================
+file_path = "AIA_Architecte_Intelligence_Artificielle/Bloc_3_Pipeline_IA/src/machine_learning_src.csv"
 df = pd.read_csv(file_path)
 
 print("✅ Données chargées avec succès")
@@ -46,7 +82,7 @@ print("Aperçu du dataset :")
 print(df.head())
 
 # ========================================
-# 🧼 3. Préparer les données
+# 🧼 5. Préparer les données
 # ========================================
 df["gender"] = df["gender"].map({"F": 0, "M": 1})
 
@@ -60,7 +96,7 @@ print("\nTypes de colonnes après encodage :")
 print(df.dtypes)
 
 # ========================================
-# 🎯 4. Définir X (features) et y (cible)
+# 🎯 6. Définir X (features) et y (cible)
 # ========================================
 X = df.drop(columns=["is_fraud"])
 y = df["is_fraud"]
@@ -70,7 +106,7 @@ print("X :", X.shape)
 print("y :", y.shape)
 
 # ========================================
-# ✂️ 5. Séparer en train et test
+# ✂️ 7. Séparer en train et test
 # ========================================
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -84,7 +120,7 @@ print("X_train :", X_train.shape)
 print("X_test  :", X_test.shape)
 
 # ========================================
-# ⚙️ 6. Définir l’espace de recherche RandomizedSearch
+# ⚙️ 8. Définir l’espace de recherche RandomizedSearch
 # ========================================
 param_dist = {
     "n_estimators": np.arange(100, 500, 50),
@@ -104,7 +140,7 @@ xgb_model = xgb.XGBClassifier(
 random_search = RandomizedSearchCV(
     estimator=xgb_model,
     param_distributions=param_dist,
-    n_iter=10,  # nombre d’essais aléatoires
+    n_iter=10,
     scoring="f1",
     cv=3,
     verbose=2,
@@ -113,7 +149,7 @@ random_search = RandomizedSearchCV(
 )
 
 # ========================================
-# 📊 7. Suivi MLflow
+# 📊 9. Suivi MLflow
 # ========================================
 mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 mlflow.set_experiment("FraudDetection_XGBoost")
@@ -137,7 +173,6 @@ with mlflow.start_run(run_name="XGBoost_Fraud_RandomSearch"):
     print("\n📈 Rapport de classification (test) :")
     print(report_text)
 
-    # Sauvegarder rapport dans un fichier texte
     Path("models").mkdir(exist_ok=True)
     report_path = "models/classification_report.txt"
     with open(report_path, "w") as f:
@@ -192,37 +227,29 @@ with mlflow.start_run(run_name="XGBoost_Fraud_RandomSearch"):
     # ========================================
     mlflow.log_params(best_params)
 
-    # Rapport classification sous dict
     report_dict = classification_report(y_test, y_pred, output_dict=True)
 
-    # Log métriques pour la classe fraude (1)
     mlflow.log_metric("precision_fraud", report_dict["1"]["precision"])
     mlflow.log_metric("recall_fraud", report_dict["1"]["recall"])
     mlflow.log_metric("f1_fraud", report_dict["1"]["f1-score"])
 
-    # Log métriques pour la classe non-fraude (0)
     mlflow.log_metric("precision_nonfraud", report_dict["0"]["precision"])
     mlflow.log_metric("recall_nonfraud", report_dict["0"]["recall"])
     mlflow.log_metric("f1_nonfraud", report_dict["0"]["f1-score"])
 
-    # Log moyennes
     mlflow.log_metric("f1_macro", report_dict["macro avg"]["f1-score"])
     mlflow.log_metric("f1_weighted", report_dict["weighted avg"]["f1-score"])
-
-    # Log AUC
     mlflow.log_metric("roc_auc", roc_auc)
 
-    # Log artifacts (rapports + plots)
     mlflow.log_artifact(report_path, artifact_path="reports")
     mlflow.log_artifact(cm_path, artifact_path="plots")
     mlflow.log_artifact(roc_path, artifact_path="plots")
     mlflow.log_artifact(pr_path, artifact_path="plots")
 
-    # Sauvegarder modèle dans MLflow
     mlflow.sklearn.log_model(random_search.best_estimator_, artifact_path="model")
 
 # ========================================
-# 💾 8. Sauvegarde locale du modèle
+# 💾 10. Sauvegarde locale du modèle
 # ========================================
 local_model_path = "models/xgboost_fraud_model.pkl"
 joblib.dump(random_search.best_estimator_, local_model_path)
