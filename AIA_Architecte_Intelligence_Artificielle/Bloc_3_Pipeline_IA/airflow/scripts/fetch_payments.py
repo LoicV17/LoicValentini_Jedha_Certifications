@@ -1,4 +1,3 @@
-# fetch_payments.py
 import os
 import json
 import requests
@@ -6,21 +5,19 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
-from pathlib import Path
+import boto3
+from io import StringIO
 
 # ===========================
-# 🔐 Charger secrets
+# 🔐 Variables d'environnement
 # ===========================
-env_path = Path(__file__).parent / "secrets" / ".env"
-load_dotenv(dotenv_path=env_path)
-
 DB_URL = os.getenv("NEONDB_URL")
 PAYMENTS_API_URL = os.getenv("PAYMENTS_API_URL")
 SCORING_API_URL = os.getenv("SCORING_API_URL")
+S3_BUCKET = os.getenv("AIRFLOW_S3_BUCKET")
 
-if not DB_URL or not PAYMENTS_API_URL or not SCORING_API_URL:
-    raise ValueError("❌ Variables d'environnement manquantes dans .env")
+if not DB_URL or not PAYMENTS_API_URL or not SCORING_API_URL or not S3_BUCKET:
+    raise ValueError("❌ Variables d'environnement manquantes")
 
 # ===========================
 # ⚙️ Connexion DB
@@ -119,6 +116,26 @@ def preprocess_transaction(tx: dict) -> dict:
         return None
 
 # ===========================
+# 📦 Helper S3
+# ===========================
+s3 = boto3.client("s3")
+
+def append_csv_to_s3(df_new: pd.DataFrame, bucket: str, key: str):
+    try:
+        obj = s3.get_object(Bucket=bucket, Key=key)
+        df_existing = pd.read_csv(obj["Body"])
+    except s3.exceptions.NoSuchKey:
+        df_existing = pd.DataFrame()
+
+    df_final = pd.concat([df_existing, df_new], ignore_index=True)
+
+    out_buffer = StringIO()
+    df_final.to_csv(out_buffer, index=False)
+    s3.put_object(Bucket=bucket, Key=key, Body=out_buffer.getvalue())
+
+    print(f"✅ {len(df_new)} lignes ajoutées dans s3://{bucket}/{key}")
+
+# ===========================
 # 🔄 Ingestion + Scoring
 # ===========================
 try:
@@ -178,6 +195,13 @@ try:
         """), clean_tx)
 
     print("✅ Transaction brute + scorée insérées avec succès !")
+
+    # 6. Sauvegarde S3
+    df_raw = pd.DataFrame([raw_tx])
+    append_csv_to_s3(df_raw, S3_BUCKET, "fraud/raw_payments.csv")
+
+    df_scored = pd.DataFrame([clean_tx])
+    append_csv_to_s3(df_scored, S3_BUCKET, "fraud/scored_payments.csv")
 
 except Exception as e:
     print("❌ Erreur ingestion:", e)

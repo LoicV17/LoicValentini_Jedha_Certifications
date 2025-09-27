@@ -4,14 +4,11 @@
 
 ## ✅ Objectif Général
 
-Mettre en production un système de **détection automatique de fraudes bancaires**, capable de :
-
-- 🚨 **Notifier en temps réel** lorsqu’une fraude est détectée.
-- 📊 **Générer un reporting quotidien** récapitulant les paiements (frauduleux ou non) de la veille.
+Mettre en production un système de **détection automatique de fraudes bancaires**
 
 ---
 
-## 🧭 Étapes du Projet (dans l’ordre logique)
+## 🧭 Étapes du Projet
 
 ---
 
@@ -61,72 +58,60 @@ Mettre en production un système de **détection automatique de fraudes bancaire
 
 ➡️ Automatiser l’ensemble du pipeline ETL + scoring + reporting.
 
-Créer 2 DAGs :
+Installer un Airflow contenerisé (**Docker**) ✅
 
-#### 🌀 `fetch_and_score` (fréquence : toutes les minutes)
 
-- Appel de l’API → stockage brut → prédiction → insertion enrichie
 
-#### 📆 `daily_report` (fréquence : chaque matin 7h)
+### 🔵 4.1 DAG fetch_and_score ✅
 
-- Requêtage des données de la veille
-- Génération d’un rapport CSV
-- Envoi par email et stockage dans S3 du CSV
+#### 🌀 `fetch_and_score` (fréquence : toutes les minutes), basé sur `fetch-payments.py` ✅
 
-✅ Airflow devra :
+- Ingestion : appelle l'API de paiements pour récupérer une transaction brute et l’insère dans la table raw_payments (NeonDB/Postgres).
+- Prétraitement : enrichit la transaction avec des features (distance client–merchant, date/heure décomposée, indicateurs week-end, etc.).
+- Scoring : envoie la transaction transformée à une API de scoring ML, récupère la prédiction + probabilité, et insère le résultat dans la table scored_payments.
+- Persistance S3 : ajoute la transaction brute et la transaction scorée dans des fichiers CSV versionnés sur S3 (fraud/raw_payments.csv et fraud/scored_payments.csv).
 
-- Piloter les scripts Python (`BashOperator`, `PythonOperator`)
-- Ajouter des logs, gestion d’erreurs
-- Être containerisé (**Docker**)
 
----
 
-### 🔵 5. Reporting & Visualisation
+### 🔵 4.2 DAG full_report_refresh -> Visualisation permanente ✅
 
-➡️ Rendre les résultats compréhensibles pour les utilisateurs.
+#### 📆 `full_report_refresh` (fréquence : chaque heure) ✅
 
-Deux options :
+- Chargement : lit le CSV brut fraud/scored_payments.csv depuis S3.
+- Transformation : convertit ce CSV en Parquet optimisé (reports/full/scored_payments.parquet) pour faciliter la consommation par Streamlit.
+- Signalisation : crée un fichier READY dans reports/full/READY pour indiquer que les données sont prêtes.
+- Utilité : alimente et synchronise la source de vérité pour les rapports et le dashboard Streamlit.
 
-#### 📊 Dashboard interactif
 
-- Créer un dashboard **Streamlit** ou **Hugging Face Space**
-- Filtres par date
-- Indicateurs clés : total transactions, % fraudes, top merchants fraudés
-- Visualisations : courbes temporelles, bar charts, heatmaps
 
-#### ✉️ Rapport automatique
+### 🔵 4.3 DAG daily_report_email ✅
 
-- Générer un **rapport quotidien** via le DAG `daily_report`
-- Format HTML ou PDF
-- Envoi par **SMTP**, Zapier ou Airtable Automation
+#### 📧 `daily_report_email` (fréquence : chaque jour à 7h) ✅
 
----
+- Chargement des données : lit le parquet reports/full/scored_payments.parquet depuis S3 (bucket pris dans AIRFLOW_S3_BUCKET).
+- Fenêtre temporelle : (re)construit event_time si nécessaire, puis filtre les transactions des 24 dernières heures.
+- Calculs & rendu : calcule Transactions / Fraudes / Taux (%) / Montant total / Montant fraudé, génère un HTML avec ces KPI + table détaillée des fraudes (triées par date).
+- Envoi d’email : expédie le rapport HTML via SmtpHook et la connexion smtp_gmail_basic aux destinataires listés dans REPORT_EMAIL_TO.
+- Archivage : enregistre le même HTML dans S3 sous reports/daily/report_YYYYMMDD.html
 
-## 🗂️ Analyse de ton Schéma Technique (PDF fourni)
 
-| Élément             | Présent sur ton schéma       | ✅ OK ? | Commentaires |
-|---------------------|-------------------------------|--------|--------------|
-| **Sources de données** | Real-time API + Historical DB | ✅     | Parfaitement identifié |
-| **Modèle ML**         | scikit-learn + MLflow         | ✅     | Tu utilises XGBoost, c’est bien |
-| **Orchestration**     | Airflow                       | ✅     | Bien prévu |
-| **Stockage**          | Amazon S3 + NeonDB            | ✅     | Bonne séparation artefacts vs données |
-| **Sortie utilisateur**| Email + Dashboard             | ✅     | Tu couvres bien les deux |
-| **Déploiement UI**    | Hugging Face                  | ✅     | Excellent choix pour la démo |
-| **Tracking ML**       | MLflow Tracking               | ✅     | Déjà implémenté |
 
-✅ Ton schéma est **cohérent**, **complet**, et **opérationnel** !
+### 🔵  4.4 DAG fraud_alert_email ✅
 
----
+#### 🚨 `fraud_alert_email` (fréquence : toutes les minutes) ✅
+- Charge le parquet reports/full/scored_payments.parquet depuis S3 et reconstruit event_time si besoin à partir des colonnes trans_*.
+- Filtre les transactions frauduleuses (prediction==1) sur la fenêtre glissante des 2 dernières minutes (tolérance anti-lag).
+- Construit un e-mail HTML avec un récap (compte, montant total) et un tableau des fraudes (limité à 200 lignes anti-spam).
+- Envoie l’alerte via SmtpHook (connexion smtp_gmail_basic) aux destinataires REPORT_EMAIL_TO – et n’envoie rien s’il n’y a pas de fraude ou pas de destinataires.
+
+
+
+
+
 
 ## 🎁 Livrables Attendus
 
 - ✅ Schéma d’**infrastructure** (déjà fait)
-- 💻 **Code complet** :
-  - Ingestion temps réel
-  - Stockage dans DB
-  - Scoring / prédiction
-  - Reporting
-  - Orchestration via Airflow
 - 🎬 **Vidéo démo** de l’ensemble (avec Vidyard, OBS, etc.)
 - 📘 *(Optionnel)* `README.md` détaillant :
   - Lancement des scripts

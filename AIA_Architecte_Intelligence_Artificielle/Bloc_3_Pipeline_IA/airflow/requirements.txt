@@ -5,3 +5,5 @@ requests
 pandas
 python-dotenv
 boto3
+matplotlib
+apache-airflow-providers-smtp

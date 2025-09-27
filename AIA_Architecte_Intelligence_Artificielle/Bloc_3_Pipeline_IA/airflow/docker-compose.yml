@@ -2,17 +2,21 @@ name: airflow_fraud_detection
 
 x-airflow-common:
   &airflow-common
-  image: apache/airflow:2.7.3
+  build:
+    context: .              # chemin vers ton Dockerfile
+    dockerfile: Dockerfile
+  env_file:               
+    - .env
   environment:
     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
     - AIRFLOW__CORE__FERNET_KEY=${FERNET_KEY}
-    - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    - AIRFLOW__LOAD_EXAMPLES=False    
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
-    - ./scripts:/opt/airflow/scripts   # <--- AJOUT ICI
+    - ./scripts:/opt/airflow/scripts  
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-0}"
   depends_on:
     - postgres
