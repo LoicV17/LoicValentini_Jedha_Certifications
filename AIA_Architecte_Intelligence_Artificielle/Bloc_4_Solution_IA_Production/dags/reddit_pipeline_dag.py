@@ -66,5 +66,13 @@ with DAG(
         python_callable=lambda: run_script("load/load_to_neondb.py", "Chargement vers NeonDB")
     )
 
+    # --- Étape 4 : Scoring émotions ---
+    task_score_emotions = PythonOperator(
+    task_id='score_emotions',
+    python_callable=lambda: run_script("ml/score_emotions.py", "Scoring émotionnel des posts Reddit")
+)
+
+
+
     # --- Orchestration ---
-    task_fetch >> task_clean >> task_load
+    task_fetch >> task_clean >> task_load >> task_score_emotions

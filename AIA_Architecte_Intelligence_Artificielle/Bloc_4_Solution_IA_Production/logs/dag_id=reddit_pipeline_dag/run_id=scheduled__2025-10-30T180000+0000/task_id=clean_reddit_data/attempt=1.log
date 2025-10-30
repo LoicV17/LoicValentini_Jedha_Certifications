@@ -1,0 +1,27 @@
+[2025-10-30T19:00:05.230+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: reddit_pipeline_dag.clean_reddit_data scheduled__2025-10-30T18:00:00+00:00 [queued]>
+[2025-10-30T19:00:05.235+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: reddit_pipeline_dag.clean_reddit_data scheduled__2025-10-30T18:00:00+00:00 [queued]>
+[2025-10-30T19:00:05.236+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2025-10-30T19:00:05.246+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): clean_reddit_data> on 2025-10-30 18:00:00+00:00
+[2025-10-30T19:00:05.252+0000] {standard_task_runner.py:60} INFO - Started process 2688 to run task
+[2025-10-30T19:00:05.255+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'reddit_pipeline_dag', 'clean_reddit_data', 'scheduled__2025-10-30T18:00:00+00:00', '--job-id', '56', '--raw', '--subdir', 'DAGS_FOLDER/reddit_pipeline_dag.py', '--cfg-path', '/tmp/tmpqabq98vi']
+[2025-10-30T19:00:05.257+0000] {standard_task_runner.py:88} INFO - Job 56: Subtask clean_reddit_data
+[2025-10-30T19:00:05.291+0000] {task_command.py:423} INFO - Running <TaskInstance: reddit_pipeline_dag.clean_reddit_data scheduled__2025-10-30T18:00:00+00:00 [running]> on host 45570051ff6d
+[2025-10-30T19:00:05.350+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='loic_valentini' AIRFLOW_CTX_DAG_ID='reddit_pipeline_dag' AIRFLOW_CTX_TASK_ID='clean_reddit_data' AIRFLOW_CTX_EXECUTION_DATE='2025-10-30T18:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-10-30T18:00:00+00:00'
+[2025-10-30T19:00:05.351+0000] {reddit_pipeline_dag.py:30} INFO - 🚀 Lancement de Nettoyage des données Reddit ...
+[2025-10-30T19:00:05.351+0000] {logging_mixin.py:188} INFO - 🚀 Lancement de Nettoyage des données Reddit ...
+[2025-10-30T19:00:05.947+0000] {reddit_pipeline_dag.py:48} INFO - 🆕 Fichier brut: reddit_lakers_20251030_160422.csv
+📥 100 lignes importées.
+🔁 Fusion avec reddit_cleaned_20251030_180005.csv (123 lignes).
+📊 123 lignes après dédoublonnage.
+✅ Nettoyage sauvegardé : /opt/***/data/processed/reddit_cleaned_20251030_190005.csv
+
+[2025-10-30T19:00:05.948+0000] {logging_mixin.py:188} INFO - 🆕 Fichier brut: reddit_lakers_20251030_160422.csv
+📥 100 lignes importées.
+🔁 Fusion avec reddit_cleaned_20251030_180005.csv (123 lignes).
+📊 123 lignes après dédoublonnage.
+✅ Nettoyage sauvegardé : /opt/***/data/processed/reddit_cleaned_20251030_190005.csv
+[2025-10-30T19:00:05.949+0000] {logging_mixin.py:188} INFO - ✅ Nettoyage des données Reddit terminé avec succès.
+[2025-10-30T19:00:05.949+0000] {python.py:201} INFO - Done. Returned value was: True
+[2025-10-30T19:00:05.967+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=reddit_pipeline_dag, task_id=clean_reddit_data, execution_date=20251030T180000, start_date=20251030T190005, end_date=20251030T190005
+[2025-10-30T19:00:06.003+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2025-10-30T19:00:06.024+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check

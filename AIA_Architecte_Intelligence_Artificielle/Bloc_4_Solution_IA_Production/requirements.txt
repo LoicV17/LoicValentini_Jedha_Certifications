@@ -1,0 +1,6 @@
+transformers==4.44.2
+torch==2.3.0
+tqdm
+pandas
+sqlalchemy
+python-dotenv
