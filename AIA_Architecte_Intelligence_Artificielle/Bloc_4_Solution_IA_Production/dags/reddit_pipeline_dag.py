@@ -27,60 +27,44 @@ with DAG(
     PROJECT_ROOT = Path(__file__).resolve().parents[1]
     RAW_DIR = PROJECT_ROOT / "data" / "raw"
 
-    def run_fetch_and_push_latest(**context):
-        """Exécute le fetch puis pousse le dernier CSV brut via XCom."""
-        script_path = PROJECT_ROOT / "src" / "ingestion" / "fetch_reddit_lakers.py"
-        logging.info("🚀 Fetch Reddit...")
-        res = subprocess.run(
+    def run_script(script_relative_path, description):
+        """Helper pour exécuter un script Python."""
+        logging.info(f"🚀 Lancement de {description} ...")
+        project_root = Path(__file__).resolve().parents[1]
+        script_path = project_root / "src" / script_relative_path
+
+        result = subprocess.run(
             ["python", str(script_path)],
-            capture_output=True, text=True
+            capture_output=True,
+            text=True
         )
-        if res.returncode != 0:
-            logging.error("STDOUT:\n" + (res.stdout or ""))
-            logging.error("STDERR:\n" + (res.stderr or ""))
-            raise RuntimeError("Échec du script d'ingestion Reddit.")
-        logging.info(res.stdout)
 
-        # Choisir le fichier le plus récent dans data/raw
-        raw_files = sorted(RAW_DIR.glob("reddit_*.csv"), key=lambda f: f.stat().st_mtime, reverse=True)
-        if not raw_files:
-            raise RuntimeError("Aucun fichier brut trouvé après fetch.")
-        latest = str(raw_files[0])
-        logging.info(f"🆕 Dernier fichier brut détecté: {latest}")
-        context["ti"].xcom_push(key="latest_file", value=latest)
-        return latest
+        if result.returncode != 0:
+            logging.error(result.stderr)
+            raise RuntimeError(f"❌ Erreur dans {description}")
 
-    def run_clean_with_xcom(**context):
-        """Récupère le chemin du dernier CSV brut et lance le nettoyage incrémental."""
-        latest_file = context["ti"].xcom_pull(task_ids="fetch_reddit_posts", key="latest_file")
-        if not latest_file:
-            raise RuntimeError("Chemin du fichier brut introuvable en XCom.")
+        logging.info(result.stdout)
+        logging.info(f"✅ {description} terminé avec succès.")
+        return True
 
-        script_path = PROJECT_ROOT / "src" / "preprocessing" / "clean_reddit_data.py"
-        logging.info(f"🧼 Nettoyage du fichier {latest_file}")
-        res = subprocess.run(
-            ["python", str(script_path), "--latest-file", latest_file],
-            capture_output=True, text=True
-        )
-        if res.returncode != 0:
-            logging.error("STDOUT:\n" + (res.stdout or ""))
-            logging.error("STDERR:\n" + (res.stderr or ""))
-            raise RuntimeError("Échec du nettoyage Reddit.")
-        logging.info(res.stdout)
-        logging.info("✅ Nettoyage terminé avec succès.")
 
-    task_fetch_reddit = PythonOperator(
-        task_id="fetch_reddit_posts",
-        python_callable=run_fetch_and_push_latest,
-        provide_context=True,
+    # --- Étape 1 : Ingestion Reddit ---
+    task_fetch = PythonOperator(
+        task_id='fetch_reddit_posts',
+        python_callable=lambda: run_script("ingestion/fetch_reddit_lakers.py", "Ingestion Reddit")
     )
 
-    task_clean_reddit = PythonOperator(
-        task_id="clean_reddit_data",
-        python_callable=run_clean_with_xcom,
-        provide_context=True,
+    # --- Étape 2 : Nettoyage ---
+    task_clean = PythonOperator(
+        task_id='clean_reddit_data',
+        python_callable=lambda: run_script("preprocessing/clean_reddit_data.py", "Nettoyage des données Reddit")
     )
 
-    task_fetch_reddit >> task_clean_reddit
+    # --- Étape 3 : Chargement NeonDB ---
+    task_load = PythonOperator(
+        task_id='load_to_neondb',
+        python_callable=lambda: run_script("load/load_to_neondb.py", "Chargement vers NeonDB")
+    )
 
-dag
+    # --- Orchestration ---
+    task_fetch >> task_clean >> task_load

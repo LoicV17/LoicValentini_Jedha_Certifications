@@ -10,7 +10,7 @@ x-airflow-common:
     - AIRFLOW__CORE__LOAD_EXAMPLES=False
     - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=True
     - AIRFLOW__WEBSERVER__RBAC=True
-    - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    - DATABASE_URL=${DATABASE_URL}
   volumes:
     - nmm_airflow_home:/opt/airflow        # volume commun
     - ./dags:/opt/airflow/dags
