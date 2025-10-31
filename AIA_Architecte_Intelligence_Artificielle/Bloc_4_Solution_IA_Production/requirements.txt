@@ -4,3 +4,4 @@ tqdm
 pandas
 sqlalchemy
 python-dotenv
+evidently==0.4.20

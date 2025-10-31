@@ -1,0 +1,2 @@
+timestamp,rows,duplicates_ratio,empty_text_ratio,avg_tokens,max_text_length,emotion_outlier_rate
+20251031_0824,166,0.0,1.0,0.0,0,0.12650602409638553
