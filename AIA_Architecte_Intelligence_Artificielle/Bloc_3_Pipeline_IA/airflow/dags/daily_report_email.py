@@ -1,11 +1,11 @@
 # dags/daily_report_email.py
 
 from airflow.decorators import dag, task
+from airflow.operators.email import EmailOperator
 from datetime import timedelta
 import pendulum
 import boto3, os, io
 import pandas as pd
-from airflow.providers.smtp.hooks.smtp import SmtpHook
 
 # Variables
 BUCKET = os.getenv("AIRFLOW_S3_BUCKET")
@@ -14,10 +14,14 @@ EMAIL_RECIPIENTS = os.getenv("REPORT_EMAIL_TO", "").split(",")
 
 @dag(
     dag_id="daily_report_email",
-    schedule_interval="0 7 * * *",  # tous les jours à 07:00
+    schedule_interval="0 7 * * *",  # Tous les jours à 07:00
     start_date=pendulum.datetime(2025, 9, 25, tz="Europe/Paris"),
     catchup=False,
-    default_args={"owner": "airflow", "retries": 1, "retry_delay": timedelta(minutes=5)},
+    default_args={
+        "owner": "airflow",
+        "retries": 1,
+        "retry_delay": timedelta(minutes=5),
+    },
     tags=["fraud", "reports", "daily", "email"],
 )
 def daily_report_email():
@@ -42,7 +46,7 @@ def daily_report_email():
         else:
             df["event_time"] = pd.NaT
 
-        # Filtrer dernières 24h
+        # Filtre 24h
         now = pendulum.now("Europe/Paris")
         start = now - timedelta(days=1)
         df = df[(df["event_time"] >= start.naive()) & (df["event_time"] < now.naive())]
@@ -58,11 +62,10 @@ def daily_report_email():
         fraud_rate = 100 * fraud_count / total_tx if total_tx else 0
         fraud_amt = frauds["amt"].sum()
 
-        # Tableau de fraudes (toutes les lignes)
+        # Tableau
         cols = [c for c in ["event_time","amt","merchant","category","state","probability"] if c in frauds.columns]
         fraude_table = frauds[cols].sort_values("event_time", ascending=False).to_html(index=False, border=0)
 
-        # HTML final
         html = f"""
         <h2>🕵️ Rapport Fraude – dernières 24h</h2>
         <p>Période : {start.to_datetime_string()} → {now.to_datetime_string()} (Europe/Paris)</p>
@@ -81,19 +84,11 @@ def daily_report_email():
         return html
 
     @task
-    def send_and_store(html_body: str):
-        # Envoi email
-        with SmtpHook(smtp_conn_id="smtp_gmail_basic") as hook:
-            hook.send_email_smtp(
-                to=EMAIL_RECIPIENTS,
-                subject="Rapport Fraude – dernières 24h",
-                html_content=html_body,
-            )
-
-        # Sauvegarde HTML dans S3
+    def store_html_in_s3(html_body: str):
         s3 = boto3.client("s3")
         now = pendulum.now("Europe/Paris")
         key = f"reports/daily/report_{now.format('YYYYMMDD')}.html"
+
         s3.put_object(
             Bucket=BUCKET,
             Key=key,
@@ -102,6 +97,18 @@ def daily_report_email():
         )
         print(f"✅ Rapport stocké : s3://{BUCKET}/{key}")
 
-    send_and_store(build_daily_html())
+        return html_body
+
+    # EmailOperator prend directement le HTML
+    send_email = EmailOperator(
+        task_id="send_email_report",
+        to=EMAIL_RECIPIENTS,
+        subject="Rapport Fraude – dernières 24h",
+        html_content="{{ ti.xcom_pull(task_ids='store_html_in_s3') }}",
+    )
+
+    html = build_daily_html()
+    html_stored = store_html_in_s3(html)
+    html_stored >> send_email
 
 dag = daily_report_email()

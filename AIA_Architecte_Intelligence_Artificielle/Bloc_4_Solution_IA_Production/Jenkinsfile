@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+    environment {
+        // Variables d'environnement utiles
+        PYTHON = "python"
+        VENV_DIR = ".venv"
+        REPORT_DIR = "reports"
+    }
+
+    stages {
+
+        stage('🧱 Setup Environment') {
+            steps {
+                echo 'Création de l’environnement virtuel...'
+                sh '''
+                if [ ! -d "$VENV_DIR" ]; then
+                    $PYTHON -m venv $VENV_DIR
+                fi
+                source $VENV_DIR/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt pytest pytest-html python-dotenv
+                '''
+            }
+        }
+
+        stage('✅ Run Pytest') {
+            steps {
+                echo 'Exécution des tests unitaires...'
+                sh '''
+                source $VENV_DIR/bin/activate
+                mkdir -p $REPORT_DIR
+                pytest src/tests/ --maxfail=1 --disable-warnings -v --html=$REPORT_DIR/tests_report.html --self-contained-html
+                '''
+            }
+        }
+
+        stage('📊 Publish Test Report') {
+            steps {
+                echo 'Publication du rapport HTML de tests...'
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'reports',
+                    reportFiles: 'tests_report.html',
+                    reportName: 'Pytest Report'
+                ])
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '🎉 Tous les tests sont passés avec succès.'
+        }
+        failure {
+            echo '❌ Certains tests ont échoué. Consulte le rapport HTML dans Jenkins.'
+        }
+    }
+}

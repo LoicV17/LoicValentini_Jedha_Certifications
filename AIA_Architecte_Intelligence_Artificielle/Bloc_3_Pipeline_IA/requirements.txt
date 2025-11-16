@@ -31,3 +31,4 @@ pydantic
 requests
 SQLAlchemy
 psycopg2-binary
+

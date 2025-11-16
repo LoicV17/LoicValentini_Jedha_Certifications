@@ -1,0 +1,145 @@
+version: "3.9"
+
+services:
+
+  # -----------------------------
+  # POSTGRES
+  # -----------------------------
+  postgres:
+    image: postgres:13
+    container_name: fraud_postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+
+  # -----------------------------
+  # AIRFLOW INIT
+  # -----------------------------
+  airflow-init:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    container_name: airflow_init
+    env_file: .env
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
+      AIRFLOW__LOAD_EXAMPLES: "False"
+
+      # -------- SMTP GMAIL --------
+      AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
+      AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
+      AIRFLOW__SMTP__SMTP_STARTTLS: "True"
+      AIRFLOW__SMTP__SMTP_SSL: "False"
+      AIRFLOW__SMTP__SMTP_PORT: "587"
+      AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
+      AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
+      AIRFLOW__SMTP__SMTP_MAIL_FROM: ${SMTP_USER}
+      # ----------------------------
+
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/scripts:/opt/airflow/scripts
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db init &&
+        airflow users create \
+          --username admin \
+          --password admin \
+          --firstname Loic \
+          --lastname Valentini \
+          --role Admin \
+          --email valentini.loic@gmail.com
+    depends_on:
+      - postgres
+    restart: "no"
+
+  # -----------------------------
+  # AIRFLOW WEBSERVER
+  # -----------------------------
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    container_name: airflow_webserver
+    env_file: .env
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
+      AIRFLOW__LOAD_EXAMPLES: "False"
+
+      # -------- SMTP GMAIL --------
+      AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
+      AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
+      AIRFLOW__SMTP__SMTP_STARTTLS: "True"
+      AIRFLOW__SMTP__SMTP_SSL: "False"
+      AIRFLOW__SMTP__SMTP_PORT: "587"
+      AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
+      AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
+      AIRFLOW__SMTP__SMTP_MAIL_FROM: ${SMTP_USER}
+      # ----------------------------
+
+    command: ["airflow", "webserver"]
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/scripts:/opt/airflow/scripts
+    ports:
+      - "8086:8080"
+    depends_on:
+      - postgres
+    restart: always
+
+  # -----------------------------
+  # AIRFLOW SCHEDULER
+  # -----------------------------
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    container_name: airflow_scheduler
+    env_file: .env
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
+      AIRFLOW__LOAD_EXAMPLES: "False"
+
+      # -------- SMTP GMAIL --------
+      AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
+      AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
+      AIRFLOW__SMTP__SMTP_STARTTLS: "True"
+      AIRFLOW__SMTP__SMTP_SSL: "False"
+      AIRFLOW__SMTP__SMTP_PORT: "587"
+      AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
+      AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
+      AIRFLOW__SMTP__SMTP_MAIL_FROM: ${SMTP_USER}
+      # ----------------------------
+
+    command: ["airflow", "scheduler"]
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/scripts:/opt/airflow/scripts
+    depends_on:
+      - postgres
+    restart: always
+
+# -----------------------------
+# VOLUMES
+# -----------------------------
+volumes:
+  postgres-db-volume:

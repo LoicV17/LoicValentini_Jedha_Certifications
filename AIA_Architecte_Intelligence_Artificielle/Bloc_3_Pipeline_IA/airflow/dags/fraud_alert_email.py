@@ -5,14 +5,19 @@ from datetime import timedelta
 import pendulum
 import boto3, os, io
 import pandas as pd
-from airflow.providers.smtp.hooks.smtp import SmtpHook
+from airflow.operators.email import EmailOperator
 
 # =========
 # Variables
 # =========
 BUCKET = os.getenv("AIRFLOW_S3_BUCKET")
 PARQUET_KEY = "reports/full/scored_payments.parquet"
-EMAIL_RECIPIENTS = [e.strip() for e in os.getenv("REPORT_EMAIL_TO", "").split(",") if e.strip()]
+EMAIL_RECIPIENTS = [
+    e.strip()
+    for e in os.getenv("REPORT_EMAIL_TO", "").split(",")
+    if e.strip()
+]
+
 
 @dag(
     dag_id="fraud_alert_email",
@@ -60,7 +65,10 @@ def fraud_alert_email():
         try:
             ev_min = df["event_time"].min()
             ev_max = df["event_time"].max()
-            print(f"[DEBUG] window: {window_start.to_datetime_string()} → {window_end.to_datetime_string()} (Europe/Paris)")
+            print(
+                f"[DEBUG] window: {window_start.to_datetime_string()} → "
+                f"{window_end.to_datetime_string()} (Europe/Paris)"
+            )
             print(f"[DEBUG] event_time min={ev_min} max={ev_max} rows={len(df)}")
         except Exception as e:
             print(f"[DEBUG] time stats error: {e}")
@@ -69,7 +77,11 @@ def fraud_alert_email():
         start_naive = window_start.naive()
         end_naive = window_end.naive()
 
-        mask = (df.get("prediction", 0) == 1) & (df["event_time"] >= start_naive) & (df["event_time"] < end_naive)
+        mask = (
+            (df.get("prediction", 0) == 1)
+            & (df["event_time"] >= start_naive)
+            & (df["event_time"] < end_naive)
+        )
         frauds = df.loc[mask].copy()
 
         print(f"[DEBUG] frauds_in_window={len(frauds)}")
@@ -77,7 +89,11 @@ def fraud_alert_email():
         if frauds.empty:
             return ""
 
-        cols = [c for c in ["event_time", "amt", "merchant", "category", "state", "probability"] if c in frauds.columns]
+        cols = [
+            c
+            for c in ["event_time", "amt", "merchant", "category", "state", "probability"]
+            if c in frauds.columns
+        ]
         frauds = frauds.sort_values("event_time", ascending=False)
 
         MAX_ROWS = 200  # anti-spam
@@ -110,14 +126,18 @@ def fraud_alert_email():
             print("⚠️ Pas de destinataires (REPORT_EMAIL_TO vide).")
             return
 
-        with SmtpHook(smtp_conn_id="smtp_gmail_basic") as hook:
-            hook.send_email_smtp(
-                to=EMAIL_RECIPIENTS,
-                subject="🚨 Alerte fraude — nouvelles transactions détectées",
-                html_content=html_body,
-            )
+        # On utilise EmailOperator à l'intérieur du taskflow
+        EmailOperator(
+            task_id="send_fraud_alert_email",
+            to=EMAIL_RECIPIENTS,
+            subject="🚨 Alerte fraude — nouvelles transactions détectées",
+            html_content=html_body,
+            conn_id="smtp_gmail_basic",  # même conn_id que ton ancien SmtpHook
+        ).execute(context={})
+
         print("✅ Email d’alerte envoyé.")
 
     send_alert(find_new_frauds())
+
 
 dag = fraud_alert_email()
