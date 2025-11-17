@@ -85,7 +85,7 @@ print("✅ Tables 'raw_payments' et 'scored_payments' prêtes.")
 # ===========================
 def preprocess_transaction(tx: dict) -> dict:
     try:
-        ts = int(tx.get("current_time", datetime.utcnow().timestamp() * 1000))
+        ts = int(tx.get("current_time", datetime.utcnow().timestamp())) * 1000
         dt = datetime.utcfromtimestamp(ts / 1000)
 
         distance = np.sqrt(
