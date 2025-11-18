@@ -1,75 +1,67 @@
-"""
-📊 Script : generate_data_quality_report.py
-🎯 Objectif : Générer un rapport Evidently orienté Data Quality sur les scores émotionnels Reddit
-"""
-
 import os
+import glob
+from pathlib import Path
 from datetime import datetime
+
 import pandas as pd
-from sqlalchemy import create_engine
 from evidently.report import Report
 from evidently.metric_preset import DataQualityPreset
-from evidently.metrics import ColumnDriftMetric, DatasetSummaryMetric
 
-# ---------------------------------------------------------------------
-# 1️⃣ Chargement des données
-# ---------------------------------------------------------------------
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    raise RuntimeError("❌ DATABASE_URL non trouvée.")
 
-engine = create_engine(DATABASE_URL)
-df = pd.read_sql("SELECT * FROM reddit_scoring;", engine)
-print(f"✅ Données chargées : {df.shape[0]} lignes, {df.shape[1]} colonnes")
+BASE_DIR = Path(__file__).resolve().parents[2]
 
-# ---------------------------------------------------------------------
-# 2️⃣ Calculs techniques de qualité de données
-# ---------------------------------------------------------------------
-duplicate_ratio = df.duplicated(subset=["id"]).mean()
-missing_ratio = df.isna().mean().mean()
 
-emotion_cols = [c for c in ["joy","anger","sadness","surprise","disgust","fear","neutral"] if c in df.columns]
-emotion_outlier_rate = (df[emotion_cols].max(axis=1) > 0.9).mean()
+def get_scored_files():
+    """Retourne tous les fichiers scorés triés par date."""
+    directory = BASE_DIR / "data" / "scored"
+    files = sorted(
+        glob.glob(str(directory / "reddit_scoring_*.csv")),
+        key=os.path.getmtime
+    )
+    return files
 
-print("📊 --- DATA QUALITY STATS ---")
-print(f"🔹 Duplicates ratio     : {duplicate_ratio:.3f}")
-print(f"🔹 Missing value ratio  : {missing_ratio:.3f}")
-print(f"🔹 Emotion outlier rate : {emotion_outlier_rate:.3f}")
 
-# ---------------------------------------------------------------------
-# 3️⃣ Rapport Evidently simplifié (orienté émotion)
-# ---------------------------------------------------------------------
-for col in emotion_cols:
-    df[col] = pd.to_numeric(df[col], errors="coerce")
+def main():
+    files = get_scored_files()
 
-report = Report(
-    metrics=[
-        DataQualityPreset(),
-        DatasetSummaryMetric(),
-        *[ColumnDriftMetric(col) for col in emotion_cols],
-    ]
-)
+    if len(files) == 0:
+        raise FileNotFoundError("Aucun fichier trouvé dans data/scored/")
 
-report.run(reference_data=df, current_data=df)
+    # 1️⃣ CURRENT DATA = dernier fichier
+    current_path = Path(files[-1])
+    df_current = pd.read_csv(current_path)
+    print(f"[Evidently] Fichier actuel : {current_path}")
 
-# ---------------------------------------------------------------------
-# 4️⃣ Sauvegarde du rapport et résumé
-# ---------------------------------------------------------------------
-timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-report_dir = "/opt/airflow/data/reports/evidently"
-os.makedirs(report_dir, exist_ok=True)
+    # 2️⃣ REFERENCE DATA
+    if len(files) >= 2:
+        # Baseline = fichier précédant
+        reference_path = Path(files[-2])
+        df_reference = pd.read_csv(reference_path)
+        print(f"[Evidently] Référence : {reference_path}")
+    else:
+        # fallback minimal → 20 premières lignes du fichier actuel
+        df_reference = df_current.head(20)
+        print("[Evidently] Référence minimale générée (pas de fichier précédent)")
 
-report_path = os.path.join(report_dir, f"reddit_data_quality_{timestamp}.html")
-report.save_html(report_path)
-print(f"✅ Rapport Evidently sauvegardé : {report_path}")
+    # 3️⃣ Construire le rapport Evidently
+    report = Report(metrics=[DataQualityPreset()])
 
-summary_df = pd.DataFrame([{
-    "timestamp": timestamp,
-    "rows": len(df),
-    "duplicates_ratio": duplicate_ratio,
-    "missing_ratio": missing_ratio,
-    "emotion_outlier_rate": emotion_outlier_rate,
-}])
-summary_path = os.path.join(report_dir, f"reddit_data_quality_summary_{timestamp}.csv")
-summary_df.to_csv(summary_path, index=False)
-print(f"✅ Fichier résumé créé : {summary_path}")
+    # IMPORTANT : Evidently 0.4.20 impose reference_data=...
+    report.run(
+        reference_data=df_reference,
+        current_data=df_current
+    )
+
+    # 4️⃣ Sauvegarde
+    reports_dir = BASE_DIR / "data" / "reports" / "jenkins"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M")
+    output_path = reports_dir / f"reddit_data_quality_{timestamp}.html"
+
+    report.save_html(str(output_path))
+    print(f"[Evidently] Rapport généré : {output_path}")
+
+
+if __name__ == "__main__":
+    main()
