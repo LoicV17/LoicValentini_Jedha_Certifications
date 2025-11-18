@@ -1,60 +1,66 @@
 pipeline {
     agent any
+
     environment {
-        // Variables d'environnement utiles
-        PYTHON = "python"
-        VENV_DIR = ".venv"
-        REPORT_DIR = "reports"
+        VENV = ".venv"
     }
 
     stages {
 
-        stage('🧱 Setup Environment') {
+        stage('Checkout') {
             steps {
-                echo 'Création de l’environnement virtuel...'
-                sh '''
-                if [ ! -d "$VENV_DIR" ]; then
-                    $PYTHON -m venv $VENV_DIR
-                fi
-                source $VENV_DIR/bin/activate
-                pip install --upgrade pip
-                pip install -r requirements.txt pytest pytest-html python-dotenv
-                '''
+                echo "📥 Récupération du code depuis GitHub..."
+                checkout scm
             }
         }
 
-        stage('✅ Run Pytest') {
+        stage('Setup Python Environment') {
             steps {
-                echo 'Exécution des tests unitaires...'
-                sh '''
-                source $VENV_DIR/bin/activate
-                mkdir -p $REPORT_DIR
-                pytest src/tests/ --maxfail=1 --disable-warnings -v --html=$REPORT_DIR/tests_report.html --self-contained-html
-                '''
+                dir("Bloc_4_Solution_IA_Production") {
+                    echo "🐍 Création et activation de l'environnement virtuel..."
+
+                    sh """
+                        python3 -m venv ${VENV}
+                        . ${VENV}/bin/activate
+
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                    """
+                }
             }
         }
 
-        stage('📊 Publish Test Report') {
+        stage('Run Pytest') {
             steps {
-                echo 'Publication du rapport HTML de tests...'
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'reports',
-                    reportFiles: 'tests_report.html',
-                    reportName: 'Pytest Report'
-                ])
+                dir("Bloc_4_Solution_IA_Production") {
+                    echo "🧪 Exécution des tests PyTest..."
+
+                    sh """
+                        . ${VENV}/bin/activate
+                        pytest src/tests/ --maxfail=1 -v
+                    """
+                }
+            }
+        }
+
+        stage('Publish Test Report') {
+            steps {
+                echo "📊 Publication des rapports de tests..."
+            }
+            post {
+                always {
+                    junit 'Bloc_4_Solution_IA_Production/reports/junit/*.xml'
+                }
             }
         }
     }
 
     post {
         success {
-            echo '🎉 Tous les tests sont passés avec succès.'
+            echo "🎉 Pipeline Jenkins exécuté avec succès !"
         }
         failure {
-            echo '❌ Certains tests ont échoué. Consulte le rapport HTML dans Jenkins.'
+            echo "❌ ECHEC : Voir les logs pour identifier le problème."
         }
     }
 }
