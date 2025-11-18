@@ -16,7 +16,7 @@ pipeline {
 
         stage('Setup Python Environment') {
             steps {
-                dir("Bloc_4_Solution_IA_Production") {
+                dir("AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production") {
                     echo "🐍 Création et activation de l'environnement virtuel..."
 
                     sh """
@@ -32,7 +32,7 @@ pipeline {
 
         stage('Run Pytest') {
             steps {
-                dir("Bloc_4_Solution_IA_Production") {
+                dir("AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production") {
                     echo "🧪 Exécution des tests PyTest..."
 
                     sh """
@@ -49,7 +49,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'Bloc_4_Solution_IA_Production/reports/junit/*.xml'
+                    junit 'AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production/reports/junit/*.xml'
                 }
             }
         }
