@@ -2,7 +2,13 @@ pipeline {
     agent any
 
     environment {
+        ENV = "PROD"  // active les vrais tests (pas de skip)
+        DATABASE_URL = credentials('DATABASE_URL') // injecté via Jenkins Credentials
         VENV = ".venv"
+    }
+
+    triggers {
+        cron('H * * * *')  // toutes les heures
     }
 
     stages {
@@ -18,11 +24,9 @@ pipeline {
             steps {
                 dir("AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production") {
                     echo "🐍 Création et activation de l'environnement virtuel..."
-
                     sh """
                         python3 -m venv ${VENV}
                         . ${VENV}/bin/activate
-
                         pip install --upgrade pip
                         pip install -r requirements.txt
                     """
@@ -34,30 +38,43 @@ pipeline {
             steps {
                 dir("AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production") {
                     echo "🧪 Exécution des tests PyTest..."
-
                     sh """
                         . ${VENV}/bin/activate
-                        pytest src/tests/ --maxfail=1 -v --junitxml=tests-report.xml
+                        pytest src/tests/ --junitxml=test-results/results.xml --maxfail=1 -v
+                    """
+                }
+            }
+            post {
+                always {
+                    echo "📊 Publication des rapports de tests..."
+                    junit 'AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production/test-results/results.xml'
+                }
+            }
+        }
+
+        stage('Generate Evidently Report') {
+            steps {
+                dir("AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production") {
+                    echo "📈 Génération du rapport Evidently..."
+                    sh """
+                        . ${VENV}/bin/activate
+                        python src/evidently_jenkins/generate_evidently_report.py
                     """
                 }
             }
         }
 
-        stage('Publish Test Report') {
+        stage('Archive Reports') {
             steps {
-                echo "📊 Publication des rapports de tests..."
-            }
-            post {
-                always {
-                    junit 'AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production/tests-report.xml'
-                }
+                echo "🗂 Archivage des rapports..."
+                archiveArtifacts artifacts: 'AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production/data/reports/jenkins/*.html', fingerprint: true
             }
         }
     }
 
     post {
         success {
-            echo "🎉 Pipeline Jenkins exécuté avec succès !"
+            echo "🎉 Succès du pipeline Reddit Data Quality !"
         }
         failure {
             echo "❌ ECHEC : Voir les logs pour identifier le problème."

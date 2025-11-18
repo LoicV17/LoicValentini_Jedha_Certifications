@@ -56,7 +56,7 @@ report.run(reference_data=df, current_data=df)
 # 4️⃣ Sauvegarde du rapport et résumé
 # ---------------------------------------------------------------------
 timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-report_dir = "/opt/airflow/data/reports"
+report_dir = "/opt/airflow/data/reports/evidently"
 os.makedirs(report_dir, exist_ok=True)
 
 report_path = os.path.join(report_dir, f"reddit_data_quality_{timestamp}.html")
