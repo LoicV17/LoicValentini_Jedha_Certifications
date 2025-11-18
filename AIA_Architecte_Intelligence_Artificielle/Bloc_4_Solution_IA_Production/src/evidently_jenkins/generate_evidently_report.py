@@ -57,7 +57,7 @@ def main():
     reports_dir.mkdir(parents=True, exist_ok=True)
 
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M")
-    output_path = reports_dir / f"reddit_data_quality_{timestamp}.html"
+    output_path = reports_dir / f"jenkins_reddit_data_quality_{timestamp}.html"
 
     report.save_html(str(output_path))
     print(f"[Evidently] Rapport généré : {output_path}")
