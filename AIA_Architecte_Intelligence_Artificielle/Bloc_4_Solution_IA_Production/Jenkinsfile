@@ -49,7 +49,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production/reports/junit/*.xml'
+                    junit 'AIA_Architecte_Intelligence_Artificielle/Bloc_4_Solution_IA_Production/tests-report.xml'
                 }
             }
         }
