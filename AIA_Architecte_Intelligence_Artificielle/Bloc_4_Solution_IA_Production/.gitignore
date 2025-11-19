@@ -1,0 +1,22 @@
+# Virtual envs
+.venv/
+venv/
+venv_streamlit/
+
+# Cache python
+__pycache__/
+*.pyc
+
+# Streamlit
+.streamlit/
+
+# Data large / temporaires
+data/raw/
+data/processed/
+data/scored/
+data/reports/jenkins/
+data/reports/*.html
+
+# VSCode / OS files
+.vscode/
+.DS_Store
