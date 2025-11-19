@@ -22,16 +22,16 @@ st.markdown("## 🧭 Navigation générale")
 
 st.markdown(
     """
-### 🔍 **Analyse, Monitoring & Industrialisation**
 
-- 📈 **Data Analysis** — courbes temporelles, intensité émotionnelle, LNMI, heatmap et radar  
-- 📑 **Data Quality – Evidently** — rapport complet de qualité, distribution et drift  
-- 🔧 **CI/CD – Jenkins** — builds, tests, statuts, logs et indicateurs qualité  
+- **Data Analysis** — courbes temporelles, intensité émotionnelle, LNMI, heatmap et radar 
+- **DAG Monitoring Airflow** — suivi des DAGs et de la bonne complétion des tâches
+- **Data Quality – Evidently** — rapport complet de qualité, distribution et drift  
+- **CI/CD – Jenkins** — builds, tests, statuts, logs et indicateurs qualité  
 
 ---
 
 Chaque module fonctionne indépendamment et contribue à une vision complète du pipeline :
-ingestion Reddit → scoring d’émotions → monitoring qualité → CI/CD → orchestration Airflow.
+ingestion Reddit → orchestration Airflow → scoring d’émotions → monitoring qualité → CI/CD 
     """
 )
 
