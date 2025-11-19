@@ -6,6 +6,9 @@ import subprocess
 import logging
 import sys
 
+# ---------------------------
+# DEFAULT ARGS
+# ---------------------------
 default_args = {
     "owner": "loic_valentini",
     "depends_on_past": False,
@@ -14,10 +17,13 @@ default_args = {
     "retry_delay": timedelta(minutes=5),
 }
 
+# ---------------------------
+# DAG
+# ---------------------------
 with DAG(
     dag_id="reddit_pipeline_dag",
     default_args=default_args,
-    description="Pipeline Reddit Lakers - Ingestion + Nettoyage + Scoring + Data Quality",
+    description="Pipeline Reddit Lakers - Ingestion + Nettoyage + Scoring + Topics + Data Quality",
     schedule_interval=timedelta(hours=1),
     start_date=datetime(2025, 10, 30),
     catchup=False,
@@ -27,15 +33,16 @@ with DAG(
 
     PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
+    # ---------------------------
+    # Utility: run Python script
+    # ---------------------------
     def run_script(script_relative_path, description):
-        """Exécute un script Python en sous-processus avec logs propres."""
         logging.info("────────────────────────────────────────────")
         logging.info(f"🚀 Lancement : {description}")
         logging.info("────────────────────────────────────────────")
 
         script_path = PROJECT_ROOT / "src" / script_relative_path
 
-        # Vérification script existant
         if not script_path.exists():
             raise FileNotFoundError(f"❌ Script introuvable : {script_path}")
 
@@ -55,8 +62,11 @@ with DAG(
         logging.info("────────────────────────────────────────────")
         return True
 
+    # ---------------------------
+    # TASKS
+    # ---------------------------
 
-    # --- Étape 1 : Ingestion Reddit ---
+    # 1️⃣ Ingestion Reddit
     task_fetch = PythonOperator(
         task_id="fetch_reddit_posts",
         python_callable=lambda: run_script(
@@ -65,7 +75,7 @@ with DAG(
         )
     )
 
-    # --- Étape 2 : Nettoyage ---
+    # 2️⃣ Nettoyage
     task_clean = PythonOperator(
         task_id="clean_reddit_data",
         python_callable=lambda: run_script(
@@ -74,7 +84,7 @@ with DAG(
         )
     )
 
-    # --- Étape 3 : Chargement NeonDB ---
+    # 3️⃣ Chargement vers NeonDB
     task_load = PythonOperator(
         task_id="load_to_neondb",
         python_callable=lambda: run_script(
@@ -83,7 +93,8 @@ with DAG(
         )
     )
 
-    # --- Étape 4 : Scoring émotions ---
+
+    # 4️⃣ Scoring des émotions
     task_score_emotions = PythonOperator(
         task_id="score_emotions",
         python_callable=lambda: run_script(
@@ -92,7 +103,16 @@ with DAG(
         )
     )
 
-    # --- Étape 5 : Rapport Evidently ---
+    # 5️⃣ Prédiction des topics (après scoring)
+    task_predict_topics = PythonOperator(
+        task_id="predict_topic_clusters",
+        python_callable=lambda: run_script(
+            "ml/predict_topic_cluster.py",
+            "Prédiction des clusters thématiques"
+        )
+    )
+
+    # 6️⃣ Rapport Evidently
     task_data_quality_report = PythonOperator(
         task_id="task_data_quality_report",
         python_callable=lambda: run_script(
@@ -101,7 +121,7 @@ with DAG(
         )
     )
 
-    # --- Étape 6 : Insertion historique ---
+    # 7️⃣ Insertion de l'historique qualité
     task_insert_quality_history = PythonOperator(
         task_id="task_insert_quality_history",
         python_callable=lambda: run_script(
@@ -110,5 +130,17 @@ with DAG(
         )
     )
 
-    # --- Orchestration du pipeline ---
-    task_fetch >> task_clean >> task_load >> task_score_emotions >> task_data_quality_report >> task_insert_quality_history
+    # ---------------------------
+    # ORCHESTRATION
+    # ---------------------------
+
+    task_fetch \
+        >> task_clean \
+        >> task_load \
+        >> task_score_emotions \
+        >> task_predict_topics \
+        >> task_data_quality_report \
+        >> task_insert_quality_history
+
+    # Optionnel : si tu veux réentraîner le clustering régulièrement
+    # task_load >> task_cluster_topics

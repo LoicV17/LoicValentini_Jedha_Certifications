@@ -27,11 +27,12 @@ st.markdown(
 - **DAG Monitoring Airflow** — suivi des DAGs et de la bonne complétion des tâches
 - **Data Quality – Evidently** — rapport complet de qualité, distribution et drift  
 - **CI/CD – Jenkins** — builds, tests, statuts, logs et indicateurs qualité  
+- **ML non supervisé K-Means** — détection d'émotions liées à des thèmes particuliers  
 
 ---
 
 Chaque module fonctionne indépendamment et contribue à une vision complète du pipeline :
-ingestion Reddit → orchestration Airflow → scoring d’émotions → monitoring qualité → CI/CD 
+ingestion Reddit → orchestration Airflow → scoring d’émotions → monitoring qualité → CI/CD → ML non supervisé K-means
     """
 )
 
