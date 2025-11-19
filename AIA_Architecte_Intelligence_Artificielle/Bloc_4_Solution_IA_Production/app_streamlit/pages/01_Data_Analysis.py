@@ -260,3 +260,81 @@ col_center = st.columns([1,2,1])[1]
 
 with col_center:
     st.pyplot(fig_radar)
+
+# =====================================================================
+# 4️⃣ LNMI PAR JOUEUR — VERSION CORRIGÉE
+# =====================================================================
+
+st.header("🏀 LNMI par joueur — Analyse fan-based")
+st.info("Classement LNMI basé sur les mentions directes des joueurs dans les posts filtrés.")
+
+# --- Charger les textes depuis reddit_cleaned
+@st.cache_data(ttl=300)
+def load_texts():
+    q = """
+        SELECT id, title, selftext
+        FROM reddit_cleaned
+    """
+    return pd.read_sql(q, engine)
+
+df_texts = load_texts()
+
+# Merge scoring + texte
+df_merged = df_filtered.merge(df_texts, on="id", how="left")
+
+# Construire texte complet
+df_merged["text"] = (
+    df_merged["title"].fillna("") + " " +
+    df_merged["selftext"].fillna("")
+)
+
+# Dictionnaire de synonymes
+players_extended = {
+    "LeBron James": [
+        "lebron","lbj","bron","king","king james","legoat","the king","bronny's dad"
+    ],
+    "Luka Doncic": [
+        "luka","doncic","luka magic","magic luka","77","lukka","dončić"
+    ],
+    "Austin Reaves": [
+        "reaves","austin","hillbilly kobe","hbk","ar15","reeves","reave"
+    ],
+    "Deandre Ayton": [
+        "ayton","deandre","ayden","big da","aytonn"
+    ],
+    "JJ Redick": [
+        "jj","redick","reddick","podfather","j.j."
+    ],
+}
+
+player_stats = []
+
+for player_name, keywords in players_extended.items():
+    pattern = "|".join([rf"(?<![A-Za-z]){k}(?![A-Za-z])" for k in keywords])
+
+    df_p = df_merged[
+        df_merged["text"].str.contains(pattern, case=False, regex=True, na=False)
+    ]
+
+    if df_p.empty:
+        lnmi_val = None
+        posts_n = 0
+    else:
+        lnmi_val = (
+            df_p["joy"] + df_p["surprise"]
+            - df_p["anger"] - df_p["fear"]
+            - df_p["sadness"] - df_p["disgust"]
+        ).mean()
+        posts_n = len(df_p)
+
+    player_stats.append({
+        "Joueur": player_name,
+        "Posts trouvés": posts_n,
+        "LNMI": lnmi_val
+    })
+
+df_players = pd.DataFrame(player_stats).sort_values("LNMI", ascending=False)
+
+st.subheader("⭐ Classement LNMI des joueurs")
+st.dataframe(df_players, use_container_width=True)
+
