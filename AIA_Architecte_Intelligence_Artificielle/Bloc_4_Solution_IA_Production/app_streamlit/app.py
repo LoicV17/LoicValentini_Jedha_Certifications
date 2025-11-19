@@ -12,7 +12,6 @@ st.markdown("""
 ### 📊 Pages disponibles
 
 - **Data Analysis** : analyse temporelle des émotions, LNMI, heatmap, radar
-- **Autres pages** (si ajoutées plus tard)
 
 ---
 """)
