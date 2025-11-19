@@ -5,44 +5,64 @@
 
 import os
 import pandas as pd
+from pathlib import Path
 from sqlalchemy import create_engine, text
+import glob
 
-# ---------------------------------------------------------------------
-# 1️⃣ Chargement du dernier fichier résumé
-# ---------------------------------------------------------------------
-report_dir = "/opt/airflow/data/reports"
+# ------------------------------------------------------------------------------
+# 1️⃣ Localisation du dossier Evidently
+# ------------------------------------------------------------------------------
+PROJECT_ROOT = Path(__file__).resolve().parents[2]  # remonte jusqu’à Bloc45/
+EVIDENTLY_DIR = PROJECT_ROOT / "data" / "reports" / "evidently"
 
-csv_files = sorted(
-    [f for f in os.listdir(report_dir) if f.startswith("reddit_data_quality_summary_")],
-    reverse=True
+print(f"📁 Dossier Evidently : {EVIDENTLY_DIR}")
+
+if not EVIDENTLY_DIR.exists():
+    raise FileNotFoundError(f"❌ Le dossier Evidently n’existe pas : {EVIDENTLY_DIR}")
+
+# ------------------------------------------------------------------------------
+# 2️⃣ Récupération du dernier fichier summary
+# ------------------------------------------------------------------------------
+summary_files = sorted(
+    glob.glob(str(EVIDENTLY_DIR / "reddit_data_quality_summary_*.csv"))
 )
-if not csv_files:
-    raise FileNotFoundError("❌ Aucun fichier summary trouvé dans /opt/airflow/data/reports")
 
-latest_csv = os.path.join(report_dir, csv_files[0])
-summary_df = pd.read_csv(latest_csv)
+if not summary_files:
+    raise FileNotFoundError(f"❌ Aucun fichier summary trouvé dans {EVIDENTLY_DIR}")
 
-print(f"✅ Chargement du fichier : {latest_csv}")
+latest_summary = summary_files[-1]
+print(f"📄 Fichier summary détecté : {latest_summary}")
+
+summary_df = pd.read_csv(latest_summary)
+print("🔍 Aperçu des métriques :")
 print(summary_df.head())
 
-# ---------------------------------------------------------------------
-# 2️⃣ Normalisation des colonnes attendues
-# ---------------------------------------------------------------------
-expected_cols = ["timestamp", "rows", "duplicates_ratio", "missing_ratio", "emotion_outlier_rate"]
-summary_df = summary_df[[col for col in expected_cols if col in summary_df.columns]]
+# ------------------------------------------------------------------------------
+# 3️⃣ Normalisation des colonnes attendues
+# ------------------------------------------------------------------------------
+expected_cols = [
+    "timestamp",
+    "rows",
+    "duplicates_ratio",
+    "missing_ratio",
+    "emotion_outlier_rate"
+]
 
-# ---------------------------------------------------------------------
-# 3️⃣ Connexion à la base NeonDB
-# ---------------------------------------------------------------------
+summary_df = summary_df[[c for c in expected_cols if c in summary_df.columns]]
+
+# ------------------------------------------------------------------------------
+# 4️⃣ Connexion NeonDB
+# ------------------------------------------------------------------------------
 DATABASE_URL = os.getenv("DATABASE_URL")
+
 if not DATABASE_URL:
-    raise RuntimeError("❌ DATABASE_URL non trouvée.")
+    raise RuntimeError("❌ DATABASE_URL non trouvée dans les variables d’environnement.")
 
 engine = create_engine(DATABASE_URL)
 
-# ---------------------------------------------------------------------
-# 4️⃣ Création de la table si nécessaire (corrigé pour SQLAlchemy ≥ 2.0)
-# ---------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# 5️⃣ Création table si nécessaire
+# ------------------------------------------------------------------------------
 create_table_query = text("""
 CREATE TABLE IF NOT EXISTS reddit_quality_history (
     id SERIAL PRIMARY KEY,
@@ -54,12 +74,17 @@ CREATE TABLE IF NOT EXISTS reddit_quality_history (
 );
 """)
 
-# ✅ Le context manager "engine.begin()" gère le commit automatiquement
 with engine.begin() as conn:
     conn.execute(create_table_query)
 
-# ---------------------------------------------------------------------
-# 5️⃣ Insertion des nouvelles métriques
-# ---------------------------------------------------------------------
-summary_df.to_sql("reddit_quality_history", con=engine, if_exists="append", index=False)
-print("✅ Historique de qualité inséré dans NeonDB avec succès !")
+# ------------------------------------------------------------------------------
+# 6️⃣ Insertion dans NeonDB
+# ------------------------------------------------------------------------------
+summary_df.to_sql(
+    "reddit_quality_history",
+    con=engine,
+    if_exists="append",
+    index=False
+)
+
+print("✅ Données ajoutées avec succès dans reddit_quality_history !")

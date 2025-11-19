@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import subprocess
 import logging
+import sys
 
 default_args = {
     "owner": "loic_valentini",
@@ -27,22 +28,31 @@ with DAG(
     PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
     def run_script(script_relative_path, description):
-        """Helper pour exécuter un script Python avec logs explicites."""
-        logging.info(f"🚀 Lancement de {description} ...")
+        """Exécute un script Python en sous-processus avec logs propres."""
+        logging.info("────────────────────────────────────────────")
+        logging.info(f"🚀 Lancement : {description}")
+        logging.info("────────────────────────────────────────────")
+
         script_path = PROJECT_ROOT / "src" / script_relative_path
 
+        # Vérification script existant
+        if not script_path.exists():
+            raise FileNotFoundError(f"❌ Script introuvable : {script_path}")
+
         result = subprocess.run(
-            ["python", str(script_path)],
+            [sys.executable, str(script_path)],
             capture_output=True,
             text=True
         )
 
         if result.returncode != 0:
+            logging.error("❌ ERREUR pendant l’exécution")
             logging.error(result.stderr)
-            raise RuntimeError(f"❌ Erreur dans {description}")
+            raise RuntimeError(f"❌ Erreur dans : {description}")
 
         logging.info(result.stdout)
-        logging.info(f"✅ {description} terminé avec succès.")
+        logging.info(f"✅ Terminé : {description}")
+        logging.info("────────────────────────────────────────────")
         return True
 
 
@@ -91,12 +101,12 @@ with DAG(
         )
     )
 
-    # --- Étape 6 (optionnelle) : Insertion historique NeonDB ---
+    # --- Étape 6 : Insertion historique ---
     task_insert_quality_history = PythonOperator(
         task_id="task_insert_quality_history",
         python_callable=lambda: run_script(
             "ml/insert_quality_metrics.py",
-            "Insertion des métriques de qualité dans NeonDB"
+            "Insertion des métriques Illumination"
         )
     )
 
