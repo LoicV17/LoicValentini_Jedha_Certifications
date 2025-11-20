@@ -15842,3 +15842,863 @@ File Path                                      PID    Runtime      # DAGs    # E
 /opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.41s           2025-11-20T08:15:44
 ================================================================================
 [2025-11-20T08:16:16.945+0000] {manager.py:451} INFO - Exiting gracefully upon receiving signal 15
+[2025-11-20T08:16:47.112+0000] {manager.py:469} INFO - Processing files using up to 1 processes at a time 
+[2025-11-20T08:16:47.114+0000] {manager.py:470} INFO - Process each file at most once every 30 seconds
+[2025-11-20T08:16:47.116+0000] {manager.py:471} INFO - Checking for new files in /opt/airflow/dags every 300 seconds
+[2025-11-20T08:16:47.117+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:16:47.175+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:16:47.608+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                0           0
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.32s           2025-11-20T08:16:47
+================================================================================
+[2025-11-20T08:17:51.374+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:16:48
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.31s           2025-11-20T08:17:51
+================================================================================
+[2025-11-20T08:18:22.534+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.31s           2025-11-20T08:17:52
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:18:22
+================================================================================
+[2025-11-20T08:18:52.767+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:18:23
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:18:52
+================================================================================
+[2025-11-20T08:19:23.045+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.12s           2025-11-20T08:18:53
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:19:23
+================================================================================
+[2025-11-20T08:19:53.698+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:19:24
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:19:53
+================================================================================
+[2025-11-20T08:20:23.825+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.12s           2025-11-20T08:19:54
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:20:23
+================================================================================
+[2025-11-20T08:20:54.157+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:20:25
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:20:54
+================================================================================
+[2025-11-20T08:21:24.403+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:20:56
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.22s           2025-11-20T08:21:24
+================================================================================
+[2025-11-20T08:21:47.348+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:21:47.381+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:21:54.747+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:21:26
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:21:54
+================================================================================
+[2025-11-20T08:22:25.068+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:21:57
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:22:25
+================================================================================
+[2025-11-20T08:22:55.576+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:22:27
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:22:55
+================================================================================
+[2025-11-20T08:23:33.163+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:22:58
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:23:33
+================================================================================
+[2025-11-20T08:24:04.355+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:23:34
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:24:04
+================================================================================
+[2025-11-20T08:24:34.664+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:24:05
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:24:34
+================================================================================
+[2025-11-20T08:25:05.475+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:24:35
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:25:05
+================================================================================
+[2025-11-20T08:25:35.792+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:25:06
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:25:35
+================================================================================
+[2025-11-20T08:26:32.732+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:25:36
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:26:32
+================================================================================
+[2025-11-20T08:26:47.514+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:26:47.544+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:27:02.873+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:26:34
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:27:02
+================================================================================
+[2025-11-20T08:27:33.295+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:27:05
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:27:33
+================================================================================
+[2025-11-20T08:28:03.718+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:27:35
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:28:03
+================================================================================
+[2025-11-20T08:28:34.078+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:28:05
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:28:34
+================================================================================
+[2025-11-20T08:29:04.309+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:28:36
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:29:04
+================================================================================
+[2025-11-20T08:29:35.379+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:29:07
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:29:35
+================================================================================
+[2025-11-20T08:30:05.835+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.31s           2025-11-20T08:29:38
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:30:05
+================================================================================
+[2025-11-20T08:30:36.356+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:30:08
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:30:36
+================================================================================
+[2025-11-20T08:31:09.886+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:30:39
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:31:09
+================================================================================
+[2025-11-20T08:31:40.012+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:31:11
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:31:40
+================================================================================
+[2025-11-20T08:31:47.977+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:31:48.027+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:32:10.414+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:31:42
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:32:10
+================================================================================
+[2025-11-20T08:32:41.215+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:32:12
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:32:41
+================================================================================
+[2025-11-20T08:33:11.377+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:32:43
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:33:11
+================================================================================
+[2025-11-20T08:33:41.677+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:33:13
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:33:41
+================================================================================
+[2025-11-20T08:34:12.825+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:33:44
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:34:12
+================================================================================
+[2025-11-20T08:34:43.177+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:34:15
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:34:43
+================================================================================
+[2025-11-20T08:35:13.519+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:34:45
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:35:13
+================================================================================
+[2025-11-20T08:35:43.876+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:35:15
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:35:43
+================================================================================
+[2025-11-20T08:36:17.912+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:35:46
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.31s           2025-11-20T08:36:17
+================================================================================
+[2025-11-20T08:36:48.781+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:36:48.815+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:36:49.083+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:36:19
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:36:49
+================================================================================
+[2025-11-20T08:37:20.227+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:36:50
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:37:20
+================================================================================
+[2025-11-20T08:37:50.500+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:37:21
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:37:50
+================================================================================
+[2025-11-20T08:38:20.914+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.31s           2025-11-20T08:37:51
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:38:20
+================================================================================
+[2025-11-20T08:39:04.642+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:38:22
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:39:04
+================================================================================
+[2025-11-20T08:39:34.871+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:39:05
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:39:34
+================================================================================
+[2025-11-20T08:40:05.356+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:39:36
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.14s           2025-11-20T08:40:05
+================================================================================
+[2025-11-20T08:40:35.869+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:40:06
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:40:35
+================================================================================
+[2025-11-20T08:41:09.732+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:40:37
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:41:09
+================================================================================
+[2025-11-20T08:41:39.886+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:41:10
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:41:39
+================================================================================
+[2025-11-20T08:41:48.887+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:41:48.933+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:42:10.242+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:41:42
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:42:10
+================================================================================
+[2025-11-20T08:42:40.752+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:42:12
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:42:40
+================================================================================
+[2025-11-20T08:43:11.082+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:42:42
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:43:11
+================================================================================
+[2025-11-20T08:43:42.204+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:43:14
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:43:42
+================================================================================
+[2025-11-20T08:44:13.180+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:43:44
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:44:13
+================================================================================
+[2025-11-20T08:44:43.525+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:44:14
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:44:43
+================================================================================
+[2025-11-20T08:45:13.872+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:44:44
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:45:13
+================================================================================
+[2025-11-20T08:45:44.100+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:45:15
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:45:44
+================================================================================
+[2025-11-20T08:46:14.459+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:45:45
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:46:14
+================================================================================
+[2025-11-20T08:46:44.788+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:46:15
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:46:44
+================================================================================
+[2025-11-20T08:46:49.868+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:46:49.895+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:47:15.127+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:46:46
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:47:15
+================================================================================
+[2025-11-20T08:47:45.357+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:47:16
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:47:45
+================================================================================
+[2025-11-20T08:48:15.634+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:47:46
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.12s           2025-11-20T08:48:15
+================================================================================
+[2025-11-20T08:48:45.882+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:48:17
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:48:45
+================================================================================
+[2025-11-20T08:49:16.116+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:48:47
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:49:16
+================================================================================
+[2025-11-20T08:49:46.366+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:49:17
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:49:46
+================================================================================
+[2025-11-20T08:50:16.647+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:49:47
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:50:16
+================================================================================
+[2025-11-20T08:50:47.710+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:50:18
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:50:47
+================================================================================
+[2025-11-20T08:51:18.063+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:50:48
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:51:18
+================================================================================
+[2025-11-20T08:51:48.284+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:51:19
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:51:48
+================================================================================
+[2025-11-20T08:51:50.350+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:51:50.432+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:52:18.609+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:51:50
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:52:18
+================================================================================
+[2025-11-20T08:52:48.960+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.14s           2025-11-20T08:52:20
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:52:48
+================================================================================
+[2025-11-20T08:53:19.180+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:52:51
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:53:19
+================================================================================
+[2025-11-20T08:53:49.395+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:53:21
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:53:49
+================================================================================
+[2025-11-20T08:54:19.714+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:53:51
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:54:19
+================================================================================
+[2025-11-20T08:54:50.064+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:54:22
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:54:50
+================================================================================
+[2025-11-20T08:55:20.276+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:54:52
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:55:20
+================================================================================
+[2025-11-20T08:55:50.494+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:55:23
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:55:50
+================================================================================
+[2025-11-20T08:56:20.705+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:55:53
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:56:20
+================================================================================
+[2025-11-20T08:56:50.796+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T08:56:50.824+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T08:56:50.946+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:56:25
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:56:50
+================================================================================
+[2025-11-20T08:57:21.239+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:56:55
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:57:21
+================================================================================
+[2025-11-20T08:57:51.568+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:57:25
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:57:51
+================================================================================
+[2025-11-20T08:58:21.803+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:57:55
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:58:21
+================================================================================
+[2025-11-20T08:58:52.141+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:58:26
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:58:52
+================================================================================
+[2025-11-20T08:59:22.459+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:58:56
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T08:59:22
+================================================================================
+[2025-11-20T08:59:52.672+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T08:59:26
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T08:59:52
+================================================================================
+[2025-11-20T09:00:45.396+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T08:59:57
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.31s           2025-11-20T09:00:45
+================================================================================
+[2025-11-20T09:01:15.876+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T09:01:01
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T09:01:15
+================================================================================
+[2025-11-20T09:01:46.197+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T09:01:32
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T09:01:46
+================================================================================
+[2025-11-20T09:01:50.854+0000] {manager.py:738} INFO - Searching for files in /opt/airflow/dags
+[2025-11-20T09:01:50.875+0000] {manager.py:741} INFO - There are 2 files in /opt/airflow/dags
+[2025-11-20T09:02:16.627+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T09:02:03
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T09:02:16
+================================================================================
+[2025-11-20T09:02:46.911+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T09:02:33
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T09:02:46
+================================================================================
+[2025-11-20T09:03:17.095+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T09:03:04
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T09:03:17
+================================================================================
+[2025-11-20T09:03:47.275+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T09:03:34
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T09:03:47
+================================================================================
+[2025-11-20T09:04:17.588+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T09:04:04
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.21s           2025-11-20T09:04:17
+================================================================================
+[2025-11-20T09:04:47.791+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.11s           2025-11-20T09:04:34
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T09:04:47
+================================================================================
+[2025-11-20T09:05:17.967+0000] {manager.py:879} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                                      PID    Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------------------  -----  ---------  --------  ----------  --------------  -------------------
+/opt/airflow/dags/reddit_pipeline_dag.py                                1           0  0.21s           2025-11-20T09:05:05
+/opt/airflow/dags/reddit_topic_retrain_dag.py                           1           0  0.11s           2025-11-20T09:05:17
+================================================================================

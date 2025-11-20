@@ -27,7 +27,8 @@ st.markdown(
 - **DAG Monitoring Airflow** — suivi des DAGs et de la bonne complétion des tâches
 - **Data Quality – Evidently** — rapport complet de qualité, distribution et drift  
 - **CI/CD – Jenkins** — builds, tests, statuts, logs et indicateurs qualité  
-- **ML non supervisé K-Means** — détection d'émotions liées à des thèmes particuliers  
+- **ML non supervisé K-Means** — détection d'émotions liées à des thèmes particuliers (clusters)
+- **ML Monitroing** - Suivi du réentrainement régulier du modèle de Clustering"
 
 ---
 
