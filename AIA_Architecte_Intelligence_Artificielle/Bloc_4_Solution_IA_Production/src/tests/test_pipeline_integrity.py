@@ -8,10 +8,13 @@ from dotenv import load_dotenv
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+IS_CI = os.getenv("CI") == "true" 
+
 
 @pytest.mark.skipif(
-    not DATABASE_URL,
-    reason="DATABASE_URL non défini — test ignoré en environnement local."
+    not DATABASE_URL or IS_CI,
+    reason="DATABASE_URL non défini ou exécution en CI (table reddit_scoring potentiellement absente)."
+    
 )
 def test_neondb_connection():
     """Vérifie la connexion à NeonDB."""

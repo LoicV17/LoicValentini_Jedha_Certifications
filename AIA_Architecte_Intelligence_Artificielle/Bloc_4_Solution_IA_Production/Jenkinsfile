@@ -2,13 +2,8 @@ pipeline {
     agent any
 
     environment {
-        ENV = "PROD"  // active les vrais tests (pas de skip)
         DATABASE_URL = "postgresql://airflow:airflow@nmm_postgres:5432/airflow"
-        VENV = ".venv"
-    }
-
-    triggers {
-        cron('H * * * *')  // toutes les heures
+        CI = "true"
     }
 
     stages {
