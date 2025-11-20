@@ -123,7 +123,7 @@ cluster_keywords = {
 # -------------------------
 # Section 1 : Clusters identifiés
 # -------------------------
-st.subheader("📌 Clusters identifiés")
+st.subheader("📌 Clusters identifiés au 20-11-2025")
 st.info("Vue d’ensemble des thèmes détectés automatiquement, avec titre humain + mots-clés.")
 
 cluster_df = pd.DataFrame([
