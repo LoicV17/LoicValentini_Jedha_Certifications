@@ -62,6 +62,22 @@ services:
       - airflow-init
     restart: always
 
+  # ---------------------------------------------------------
+  # 🚀 JENKINS (ajout sans toucher le reste)
+  # ---------------------------------------------------------
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: nmm_jenkins
+    user: root
+    ports:
+      - "9090:8080"     # Jenkins accessible sur http://localhost:9090
+    volumes:
+      - nmm_jenkins_home:/var/jenkins_home
+    environment:
+      JENKINS_OPTS: "--prefix=/"
+    restart: unless-stopped
+
 volumes:
   nmm_postgres_data:
   nmm_airflow_home:
+  nmm_jenkins_home:

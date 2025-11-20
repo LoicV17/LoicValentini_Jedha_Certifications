@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         ENV = "PROD"  // active les vrais tests (pas de skip)
-        DATABASE_URL = credentials('DATABASE_URL') // injecté via Jenkins Credentials
+        DATABASE_URL = "postgresql://airflow:airflow@nmm_postgres:5432/airflow"
         VENV = ".venv"
     }
 
