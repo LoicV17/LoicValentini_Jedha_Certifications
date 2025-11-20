@@ -2,52 +2,44 @@ version: "3.9"
 
 services:
 
-  # -----------------------------
-  # POSTGRES
-  # -----------------------------
-  postgres:
+  ###############################################
+  # POSTGRES – BLOC 3
+  ###############################################
+  bloc3_postgres:
     image: postgres:13
-    container_name: fraud_postgres
+    container_name: bloc3_postgres
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     ports:
-      - "5432:5432"
+      - "5444:5432"
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
+      - bloc3_postgres_data:/var/lib/postgresql/data
+    networks:
+      - bloc3_network
 
-  # -----------------------------
-  # AIRFLOW INIT
-  # -----------------------------
-  airflow-init:
+  ###############################################
+  # AIRFLOW INIT – BLOC 3
+  ###############################################
+  bloc3_airflow_init:
     build:
       context: .
       dockerfile: Dockerfile.airflow
-    container_name: airflow_init
+    container_name: bloc3_airflow_init
     env_file: .env
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@bloc3_postgres/airflow
       AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
       AIRFLOW__LOAD_EXAMPLES: "False"
 
-      # -------- SMTP GMAIL --------
-      AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
-      AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
-      AIRFLOW__SMTP__SMTP_STARTTLS: "True"
-      AIRFLOW__SMTP__SMTP_SSL: "False"
-      AIRFLOW__SMTP__SMTP_PORT: "587"
-      AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
-      AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
-      AIRFLOW__SMTP__SMTP_MAIL_FROM: ${SMTP_USER}
-      # ----------------------------
-
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
+      - bloc3_airflow_logs:/opt/airflow/logs
+      - bloc3_airflow_plugins:/opt/airflow/plugins
       - ./airflow/scripts:/opt/airflow/scripts
+
     entrypoint: /bin/bash
     command:
       - -c
@@ -60,86 +52,84 @@ services:
           --lastname Valentini \
           --role Admin \
           --email valentini.loic@gmail.com
+
     depends_on:
-      - postgres
+      - bloc3_postgres
+    networks:
+      - bloc3_network
     restart: "no"
 
-  # -----------------------------
-  # AIRFLOW WEBSERVER
-  # -----------------------------
-  webserver:
+  ###############################################
+  # AIRFLOW WEBSERVER – BLOC 3
+  ###############################################
+  bloc3_webserver:
     build:
       context: .
       dockerfile: Dockerfile.airflow
-    container_name: airflow_webserver
+    container_name: bloc3_webserver
     env_file: .env
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@bloc3_postgres/airflow
       AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
       AIRFLOW__LOAD_EXAMPLES: "False"
-
-      # -------- SMTP GMAIL --------
-      AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
-      AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
-      AIRFLOW__SMTP__SMTP_STARTTLS: "True"
-      AIRFLOW__SMTP__SMTP_SSL: "False"
-      AIRFLOW__SMTP__SMTP_PORT: "587"
-      AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
-      AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
-      AIRFLOW__SMTP__SMTP_MAIL_FROM: ${SMTP_USER}
-      # ----------------------------
 
     command: ["airflow", "webserver"]
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
+      - bloc3_airflow_logs:/opt/airflow/logs
+      - bloc3_airflow_plugins:/opt/airflow/plugins
       - ./airflow/scripts:/opt/airflow/scripts
+
     ports:
       - "8086:8080"
+
     depends_on:
-      - postgres
+      - bloc3_postgres
+    networks:
+      - bloc3_network
     restart: always
 
-  # -----------------------------
-  # AIRFLOW SCHEDULER
-  # -----------------------------
-  scheduler:
+  ###############################################
+  # AIRFLOW SCHEDULER – BLOC 3
+  ###############################################
+  bloc3_scheduler:
     build:
       context: .
       dockerfile: Dockerfile.airflow
-    container_name: airflow_scheduler
+    container_name: bloc3_scheduler
     env_file: .env
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@bloc3_postgres/airflow
       AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
       AIRFLOW__LOAD_EXAMPLES: "False"
-
-      # -------- SMTP GMAIL --------
-      AIRFLOW__EMAIL__EMAIL_BACKEND: airflow.utils.email.send_email_smtp
-      AIRFLOW__SMTP__SMTP_HOST: smtp.gmail.com
-      AIRFLOW__SMTP__SMTP_STARTTLS: "True"
-      AIRFLOW__SMTP__SMTP_SSL: "False"
-      AIRFLOW__SMTP__SMTP_PORT: "587"
-      AIRFLOW__SMTP__SMTP_USER: ${SMTP_USER}
-      AIRFLOW__SMTP__SMTP_PASSWORD: ${SMTP_PASSWORD}
-      AIRFLOW__SMTP__SMTP_MAIL_FROM: ${SMTP_USER}
-      # ----------------------------
 
     command: ["airflow", "scheduler"]
     volumes:
       - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
+      - bloc3_airflow_logs:/opt/airflow/logs
+      - bloc3_airflow_plugins:/opt/airflow/plugins
       - ./airflow/scripts:/opt/airflow/scripts
+
     depends_on:
-      - postgres
+      - bloc3_postgres
+
+    networks:
+      - bloc3_network
     restart: always
 
-# -----------------------------
-# VOLUMES
-# -----------------------------
+################################################
+# VOLUMES SPÉCIFIQUES AU BLOC 3
+################################################
 volumes:
-  postgres-db-volume:
+  bloc3_postgres_data:
+  bloc3_airflow_logs:
+  bloc3_airflow_plugins:
+
+################################################
+# NETWORK ISOLE
+################################################
+networks:
+  bloc3_network:
+    driver: bridge
