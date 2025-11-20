@@ -82,12 +82,21 @@ except Exception as e:
 
 
 # ---------------------------------------------------------
-# 🟨 SECTION 3 — Tests détaillés
+# 🟨 SECTION 3 — Tests détaillés (avec session_state FIX)
 # ---------------------------------------------------------
 st.header("🧪 Détail des tests")
 
 build_number = st.number_input("Numéro du build", min_value=1, step=1, value=last_build)
 
+# Initialisation état
+if "tests_loaded" not in st.session_state:
+    st.session_state.tests_loaded = False
+
+if "df_tests" not in st.session_state:
+    st.session_state.df_tests = None
+
+
+# 🔘 Bouton pour charger les tests
 if st.button("Charger les tests"):
     try:
         report = get_json(
@@ -97,10 +106,8 @@ if st.button("Charger les tests"):
         all_tests = []
         for suite in report.get("suites", []):
             for case in suite.get("cases", []):
-                
                 status = case["status"]
-                
-                # Icon & Color Mapping
+
                 if status == "PASSED":
                     icon = "✔️"
                     color = "🟢"
@@ -119,20 +126,30 @@ if st.button("Charger les tests"):
                     "Erreur": case.get("errorDetails"),
                 })
 
-        df_tests = pd.DataFrame(all_tests)
-
-        st.subheader(f"🔍 {len(df_tests)} tests trouvés dans le build {build_number}")
-        st.dataframe(df_tests)
-
-        # Option : afficher logs pour un test spécifique
-        test_selected = st.selectbox("Voir les logs d'un test :", df_tests["Test"])
-        if test_selected:
-            err = df_tests[df_tests["Test"] == test_selected]["Erreur"].values[0]
-            if err:
-                st.error(err)
-            else:
-                st.success("Aucune erreur 👍")
+        st.session_state.df_tests = pd.DataFrame(all_tests)
+        st.session_state.tests_loaded = True
 
     except Exception as e:
         st.error(f"❌ Aucun test trouvé pour le build {build_number}.")
         st.exception(e)
+
+
+# -------------------------------------------
+# 🔄 Affichage stable même après rerun
+# -------------------------------------------
+if st.session_state.tests_loaded and st.session_state.df_tests is not None:
+
+    df_tests = st.session_state.df_tests
+
+    st.subheader(f"🔍 {len(df_tests)} tests dans le build {build_number}")
+    st.dataframe(df_tests, use_container_width=True)
+
+    test_selected = st.selectbox("Voir les logs d'un test :", df_tests["Test"])
+
+    if test_selected:
+        err = df_tests[df_tests["Test"] == test_selected]["Erreur"].values[0]
+        if err:
+            st.error(err)
+        else:
+            st.success("Aucune erreur 👍")
+

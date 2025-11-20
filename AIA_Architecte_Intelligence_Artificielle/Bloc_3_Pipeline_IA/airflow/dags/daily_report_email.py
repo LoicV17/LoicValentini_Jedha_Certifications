@@ -105,6 +105,7 @@ def daily_report_email():
         to=EMAIL_RECIPIENTS,
         subject="Rapport Fraude – dernières 24h",
         html_content="{{ ti.xcom_pull(task_ids='store_html_in_s3') }}",
+        conn_id="gmail_smtp"
     )
 
     html = build_daily_html()
