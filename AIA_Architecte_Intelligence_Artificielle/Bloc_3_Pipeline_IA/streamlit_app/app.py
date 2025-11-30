@@ -6,9 +6,11 @@ import altair as alt
 import seaborn as sns
 import matplotlib.pyplot as plt
 import io
+import pathlib
 from dotenv import load_dotenv
+from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 
-# Charger les variables du fichier .env
+# Charger les variables du fichier .env (utile en local)
 load_dotenv()
 
 # ==============
@@ -49,30 +51,59 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============
-# CONFIG AWS
+# CONFIG AWS / SNAPSHOT
 # ==============
 s3 = boto3.client("s3")
 BUCKET = os.getenv("AIRFLOW_S3_BUCKET", "fraud-detection-loicvalentini")
 KEY = "reports/full/scored_payments.parquet"
 
-@st.cache_data
-def load_data():
-    obj = s3.get_object(Bucket=BUCKET, Key=KEY)
-    df = pd.read_parquet(io.BytesIO(obj["Body"].read()))
-    return df
+# Snapshot local pour fallback (à ajouter dans ton repo)
+SNAPSHOT_PATH = pathlib.Path("data/fraud_snapshot.parquet")
 
-df = load_data()
+
+@st.cache_data(show_spinner="Chargement des données de transactions...")
+def load_data():
+    """
+    1️⃣ Essaie de charger les données depuis S3 (source 'prod').
+    2️⃣ En cas d'échec (quota, creds, réseau…), bascule sur un snapshot local.
+    """
+    try:
+        obj = s3.get_object(Bucket=BUCKET, Key=KEY)
+        df = pd.read_parquet(io.BytesIO(obj["Body"].read()))
+        return df
+
+    except (ClientError, BotoCoreError, NoCredentialsError, OSError) as e:
+        st.warning("⚠️ Impossible de récupérer les données sur S3. Utilisation d’un snapshot local.")
+        st.caption(f"Détail de l’erreur S3 : {e}")
+
+        if not SNAPSHOT_PATH.exists():
+            st.error(
+                f"❌ Aucun snapshot local trouvé à l’emplacement : {SNAPSHOT_PATH}.\n"
+                "Ajoute par exemple un fichier 'data/fraud_snapshot.parquet' ou adapte le chemin."
+            )
+            raise
+
+        # Lecture du snapshot local (parquet ou csv)
+        if SNAPSHOT_PATH.suffix == ".parquet":
+            df = pd.read_parquet(SNAPSHOT_PATH)
+        else:
+            df = pd.read_csv(SNAPSHOT_PATH)
+
+        return df
+
 
 # ==============
-# HEADER
+# HEADER + DATA
 # ==============
 st.title("🕵️ Rapport Fraude Global")
 st.markdown("Un aperçu complet des transactions scorées avec détection de fraude.")
 
-if st.button("🔄 Recharger les données"):
-    st.cache_data.clear()
+# Chargement initial
 df = load_data()
 
+if st.button("🔄 Recharger les données"):
+    st.cache_data.clear()
+    df = load_data()
 
 # ==============
 # KPIs
@@ -81,15 +112,35 @@ fraud_amount = df.loc[df["prediction"] == 1, "amt"].sum()
 
 col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
-    st.markdown(f"<div class='metric-card'><div class='metric-title'>Transactions cumulées</div><div class='metric-value'>{len(df):,}</div></div>", unsafe_allow_html=True)
+    st.markdown(
+        f"<div class='metric-card'><div class='metric-title'>Transactions cumulées</div>"
+        f"<div class='metric-value'>{len(df):,}</div></div>",
+        unsafe_allow_html=True
+    )
 with col2:
-    st.markdown(f"<div class='metric-card'><div class='metric-title'>Fraudes cumulées</div><div class='metric-value'>{df['prediction'].sum():,}</div></div>", unsafe_allow_html=True)
+    st.markdown(
+        f"<div class='metric-card'><div class='metric-title'>Fraudes cumulées</div>"
+        f"<div class='metric-value'>{df['prediction'].sum():,}</div></div>",
+        unsafe_allow_html=True
+    )
 with col3:
-    st.markdown(f"<div class='metric-card'><div class='metric-title'>Taux de fraude global</div><div class='metric-value'>{100*df['prediction'].mean():.2f}%</div></div>", unsafe_allow_html=True)
+    st.markdown(
+        f"<div class='metric-card'><div class='metric-title'>Taux de fraude global</div>"
+        f"<div class='metric-value'>{100*df['prediction'].mean():.2f}%</div></div>",
+        unsafe_allow_html=True
+    )
 with col4:
-    st.markdown(f"<div class='metric-card'><div class='metric-title'>Montant total analysé (€)</div><div class='metric-value'>{df['amt'].sum():,.0f}</div></div>", unsafe_allow_html=True)
+    st.markdown(
+        f"<div class='metric-card'><div class='metric-title'>Montant total analysé (€)</div>"
+        f"<div class='metric-value'>{df['amt'].sum():,.0f}</div></div>",
+        unsafe_allow_html=True
+    )
 with col5:
-    st.markdown(f"<div class='metric-card'><div class='metric-title'>Montant total fraudé (€)</div><div class='metric-value' style='color:red;'>{fraud_amount:,.0f}</div></div>", unsafe_allow_html=True)
+    st.markdown(
+        f"<div class='metric-card'><div class='metric-title'>Montant total fraudé (€)</div>"
+        f"<div class='metric-value' style='color:red;'>{fraud_amount:,.0f}</div></div>",
+        unsafe_allow_html=True
+    )
 
 st.divider()
 
@@ -111,7 +162,7 @@ if {"trans_year", "trans_month", "trans_day", "trans_hour"}.issubset(df.columns)
         errors="coerce"
     )
 else:
-    st.warning("⚠️ Colonnes temporelles manquantes. Vérifie ton CSV.")
+    st.warning("⚠️ Colonnes temporelles manquantes. Vérifie ton dataset.")
     df["event_time"] = pd.NaT
 
 # Granularité
@@ -187,11 +238,9 @@ with col2:
 
     st.altair_chart(chart_state, use_container_width=True)
 
-
 # ==========
 # DATASET COMPLET
 # ==========
-# Réorganiser et renommer les colonnes
 df_display = df.rename(columns={"unnamed_0": "trans_number"})
 df_display["date"] = df_display["event_time"].dt.strftime("%Y-%m-%d %H:%M")
 
@@ -213,7 +262,7 @@ st.download_button("⬇️ Télécharger CSV complet", data=csv, file_name="frau
 with st.sidebar:
     st.markdown("---")
     st.markdown(
-        "<span style='color:gray; font-size:12px;'>"
+        "<span class='sidebar-text'>"
         "Made by <b>Loic Valentini</b><br>"
         "Jedha AIA – Projet Bloc 3 – <i>Fraud_detection</i>"
         "</span>",
