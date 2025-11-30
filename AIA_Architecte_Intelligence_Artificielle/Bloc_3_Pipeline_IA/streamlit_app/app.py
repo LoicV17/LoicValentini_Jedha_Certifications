@@ -58,7 +58,7 @@ BUCKET = os.getenv("AIRFLOW_S3_BUCKET", "fraud-detection-loicvalentini")
 KEY = "reports/full/scored_payments.parquet"
 
 # Snapshot local pour fallback (à ajouter dans ton repo)
-SNAPSHOT_PATH = pathlib.Path("data/fraud_snapshot.parquet")
+SNAPSHOT_PATH = pathlib.Path("data/scored_payments.parquet")
 
 
 @st.cache_data(show_spinner="Chargement des données de transactions...")
