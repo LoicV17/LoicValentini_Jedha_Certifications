@@ -1,0 +1,2 @@
+timestamp,rows_total,rows_reference,rows_current,duplicates_ratio,missing_ratio,emotion_outlier_rate
+20251201_1700,2081,2011,70,0.0,0.0,0.1470446900528592
