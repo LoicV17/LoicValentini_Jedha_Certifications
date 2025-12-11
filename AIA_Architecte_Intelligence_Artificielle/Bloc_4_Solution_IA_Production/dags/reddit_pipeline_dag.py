@@ -142,5 +142,3 @@ with DAG(
         >> task_data_quality_report \
         >> task_insert_quality_history
 
-    # Optionnel : si tu veux réentraîner le clustering régulièrement
-    # task_load >> task_cluster_topics
